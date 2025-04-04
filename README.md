@@ -40,10 +40,3 @@ polymorphism, abstract classes, and exception handling.
    Abstract base classes are used in modules like 04 and 05 to define interfaces.
 
 
- 📝 License
-
-This project is part of the [42 School curriculum](https://42.fr) and is provided for educational purposes.
-
----
-
-Let me know if you're tailoring this for a specific module or if you'd like badges, visuals, or project structure included too!
