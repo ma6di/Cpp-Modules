@@ -1,0 +1,133 @@
+What Is an Abstract Class?
+An abstract class in C++ is a class that is designed to be a base class only and cannot be instantiated. 
+It serves as a blueprint for other classes. You declare an abstract class by including at least one pure 
+virtual function, which is a virtual function that has no implementation in the base class.
+
+Key Characteristics of Abstract Classes
+Cannot Be Instantiated:
+
+You cannot create objects of an abstract class.
+Example:
+cpp
+Copy code
+Animal a; // Compilation Error: Cannot instantiate an abstract class.
+Pure Virtual Functions:
+
+A pure virtual function is declared by assigning = 0 to a virtual function in the base class.
+cpp
+Copy code
+virtual void makeSound() const = 0;
+This means the function must be implemented by any non-abstract derived class.
+Used for Polymorphism:
+
+Abstract classes allow you to define a consistent interface for derived classes. For example, all derived classes of Animal must define the makeSound() function, but each can have its own implementation.
+Can Contain Implemented Functions:
+
+An abstract class can also have implemented (non-pure virtual) functions, constructors, and member variables.
+Why Use Abstract Classes?
+Abstract classes are useful when:
+
+You want to enforce a common interface for all derived classes.
+For instance, all animals should be able to makeSound(), but the specific sound depends on the type of animal.
+You want to prevent the creation of incomplete or nonsensical objects.
+For example, you don’t want to create a generic Animal object because it has no meaningful implementation for makeSound().
+Example of Abstract Class
+Abstract Base Class (Animal)
+cpp
+Copy code
+class Animal {
+protected:
+    std::string type;
+
+public:
+    // Constructor
+    Animal() : type("Animal") {}
+
+    // Pure virtual function
+    virtual void makeSound() const = 0;
+
+    // Getter for type
+    std::string getType() const {
+        return type;
+    }
+
+    // Virtual destructor
+    virtual ~Animal() {}
+};
+Derived Class (Dog)
+cpp
+Copy code
+class Dog : public Animal {
+public:
+    Dog() {
+        type = "Dog";
+    }
+
+    void makeSound() const override {
+        std::cout << "Woof! Woof!" << std::endl;
+    }
+
+    ~Dog() {
+        std::cout << "Dog destroyed." << std::endl;
+    }
+};
+Derived Class (Cat)
+cpp
+Copy code
+class Cat : public Animal {
+public:
+    Cat() {
+        type = "Cat";
+    }
+
+    void makeSound() const override {
+        std::cout << "Meow!" << std::endl;
+    }
+
+    ~Cat() {
+        std::cout << "Cat destroyed." << std::endl;
+    }
+};
+How It Works in Practice
+Code Example
+cpp
+Copy code
+int main() {
+    Animal* dog = new Dog();
+    Animal* cat = new Cat();
+
+    dog->makeSound(); // Outputs: Woof! Woof!
+    cat->makeSound(); // Outputs: Meow!
+
+    delete dog; // Calls Dog destructor
+    delete cat; // Calls Cat destructor
+
+    return 0;
+}
+Output
+plaintext
+Copy code
+Woof! Woof!
+Meow!
+Dog destroyed.
+Cat destroyed.
+Key Benefits of Abstract Classes
+Encapsulation of Common Behavior:
+
+Common functionality (e.g., getType) can be implemented in the base class, while specific behaviors (e.g., makeSound) can vary in derived classes.
+Prevents Instantiation of Incomplete Classes:
+
+Abstract classes prevent creating objects that lack meaningful implementation.
+Enables Polymorphism:
+
+You can treat objects of different derived types (Dog, Cat) as the base type (Animal) and call overridden methods through pointers or references.
+Abstract Class vs Interface
+An interface in C++ is effectively an abstract class where all member functions are pure virtual.
+In C++, abstract classes can also have member variables and implemented functions, while interfaces typically do not.
+By making the Animal class abstract in the exercise, we ensure that all derived classes implement the required functionality (makeSound), while preventing the creation of generic Animal objects that don't make sense in this context.
+
+
+
+
+
+

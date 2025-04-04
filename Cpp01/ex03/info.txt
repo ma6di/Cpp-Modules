@@ -1,0 +1,73 @@
+HumanA
+Always Armed: HumanA is designed to always have a weapon. It takes the Weapon as a reference in its constructor, meaning:
+A Weapon must be provided when constructing a HumanA object.
+The reference ensures the Weapon is always valid and cannot be null.
+Immutable Association: Once a HumanA object is created, its Weapon cannot be "unset" or made invalid. It always has a weapon.
+
+HumanB
+Optional Weapon: HumanB does not require a Weapon at construction. It may or may not have a weapon at any given time.
+ The Weapon is set later using setWeapon.
+Mutable Association: HumanB can change its weapon or even have no weapon at all (a null pointer). 
+This reflects flexibility in the design.
+
+
+
+Implementation Plan for Exercise 03: Unnecessary Violence
+This exercise focuses on implementing three classes: Weapon, HumanA, and HumanB. The key difference between HumanA and HumanB is their relationship 
+with the Weapon object—HumanA always has a Weapon reference, while HumanB can have an optional Weapon pointer.
+
+Thought Process
+When to use a pointer vs. a reference
+References:
+
+Used when the association is mandatory.
+For HumanA, a reference ensures that the Weapon is always available, and the program can't operate without one.
+Pointers:
+
+Used when the association is optional or may change after initialization.
+For HumanB, a pointer is ideal because the Weapon may not be set initially or may be set to nullptr to indicate no weapon.
+Requirements
+Weapon Class
+Attributes:
+std::string type: A private attribute representing the weapon type.
+Member Functions:
+const std::string& getType() const: Returns a constant reference to type.
+void setType(const std::string& newType): Sets the weapon type.
+HumanA Class
+Attributes:
+std::string name: Name of the human.
+Weapon& weapon: A reference to the weapon (mandatory association).
+Member Functions:
+void attack() const: Prints the attack message.
+HumanB Class
+
+Attributes:
+std::string name: Name of the human.
+Weapon* weapon: A pointer to the weapon (optional association).
+Member Functions:
+void setWeapon(Weapon& newWeapon): Sets the weapon.
+void attack() const: Prints the attack message (only if the weapon is set).
+
+File Structure
+Weapon.hpp and Weapon.cpp: For the Weapon class.
+HumanA.hpp and HumanA.cpp: For the HumanA class.
+HumanB.hpp and HumanB.cpp: For the HumanB class.
+main.cpp: Main program to test the classes.
+Makefile: A Makefile to compile the program.
+
+
+Explanation of Key Concepts
+Weapon Initialization:
+
+Weapon is initialized with a type in the constructor.
+It provides functions to get and update the weapon type.
+HumanA:
+
+Always has a Weapon via a reference. The constructor ensures that a valid Weapon is provided.
+HumanB:
+
+Can optionally have a Weapon via a pointer. setWeapon allows updating the weapon.
+Memory Management:
+
+No dynamic memory allocation is used, so no manual deletion is necessary.
+The program avoids memory leaks by relying on stack-allocated objects.

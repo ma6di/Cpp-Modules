@@ -1,0 +1,95 @@
+In C++, std::string::npos is a constant of type std::size_t, which is used to indicate that 
+a string search operation did not find the desired substring. It represents the highest possible 
+value for a std::size_t, often equivalent to -1 when interpreted as an unsigned value.
+xx
+--------
+
+std::ios_base::failure is an exception class in C++ that is part of the std::ios_base class, 
+which is the base class for C++ stream classes like std::ifstream, std::ofstream, and std::iostream.
+
+It is used to represent errors related to I/O (Input/Output) operations, specifically in cases when
+something goes wrong during file or stream operations.
+
+-------
+xx
+. catch (const std::exception& e)
+catch: This keyword is used to define the block of code that will execute when an exception is thrown in 
+the corresponding try block.xx
+const std::exception& e: This is the type of the exception that the catch block is prepared to handle.
+std::exception: This is a standard C++ class that serves as the base class for all exceptions in C++. 
+All exceptions in C++ derive from this base class, which means any xx error or issue can be caught using this type.
+const: Ensures that the exception object cannot be modified within the catch block. It is read-only.
+std::exception& e: The e is a reference to the exception object. By using a reference, we avoid making 
+a copy of the exception object, which is more efficient and avoids unnecessary copying of data. 
+The reference allows us to access the exception object directly.
+
+std::cerr << e.what() << std::endl;xx
+std::cerr: This is the standard error stream in C++. It's used to output error messages. 
+Unlike std::cout, which is used for regular output, std::cerr is typically used to report errors or issues.
+e.what(): The what() member function is inherited from std::exception. It returns a C-style string (const char*) 
+that describes the exception. This string contains an explanation of what went wrong.
+
+-------------
+
+Exercise 04: Sed is for Losers
+This exercise involves creating a program that reads a file, replaces occurrences of a specified string (s1) with another string (s2), and writes the modified content into a new file named <filename>.replace. The focus is on using C++ features like file streams and string manipulation while avoiding std::string::replace.
+
+Requirements Breakdown
+Input Parameters:
+xx
+The program accepts three command-line arguments:
+filename: Name of the file to read from.
+s1: The string to be replaced.
+s2: The string to replace s1 with.
+File Operations:
+
+Open the input file for reading.
+Create a new file named <filename>.replace for writing.
+String Replacement:xx
+
+Replace all occurrences of s1 with s2 in the file content.
+Use any member functions of std::string except replace.
+Error Handling:
+xx
+Handle cases where:
+Fewer than three arguments are provided.
+The input file cannot be opened.
+s1 is empty (invalid input).
+Memory or I/O errors occur.
+Implementation Plan
+Classes and Functions
+main():
+
+Parse command-line arguments and handle invalid input.
+Open the input file and output file.
+Call a function to process the file content.
+processFile():
+
+Reads the input file line by line.
+Replaces occurrences of s1 with s2 in each line.
+Writes the modified line to the output file.
+replaceAll():
+
+A helper function that replaces all occurrences of s1 in a string with s2.
+Implements the replacement logic without using std::string::replace.
+File Structure
+main.cpp: Contains the main program logic.
+Makefile: Compiles the program.
+
+Explanation of Key Components
+replaceAll():
+
+Uses find to locate occurrences of s1.
+Constructs the result string by appending parts before s1, replacing s1 with s2, and appending the rest.
+File Processing:
+
+Reads the input file line by line using std::getline.
+Applies replaceAll on each line.
+Writes the modified line to the output file.
+Error Handling:
+
+Throws exceptions for invalid input or file-related errors.
+Catches exceptions in main() and prints user-friendly error messages.
+Makefile:
+
+Ensures the program is compiled with appropriate flags (-Wall -Wextra -Werror -std=c++98).

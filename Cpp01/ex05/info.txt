@@ -1,0 +1,69 @@
+A pointer to a member function is a special type of pointer 
+in C++ that allows calling a non-static member function of
+a class via an instance.
+
+ReturnType (ClassName::*PointerName)(ArgumentTypes);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Exercise 05: Harl 2.0
+This exercise involves implementing a Harl class that automates specific complaints at four levels: DEBUG, INFO, WARNING, and ERROR. Instead of using a series of if or else if statements, the solution must employ pointers to member functions to determine which function to call based on the input level.
+
+Requirements Breakdown
+Class Design:
+
+The Harl class has:
+Four private member functions: debug, info, warning, and error.
+A public member function complain that:
+Takes a std::string parameter (level).
+Calls the appropriate private function using a pointer-to-member-function mechanism.
+Functionality:
+
+Each private function outputs a specific message based on the level.
+The complain function should map the input level to the appropriate private function without using a chain of if or else if statements.
+Testing:
+
+Demonstrate that the Harl class behaves as expected for all levels.
+Include meaningful output examples to verify functionality.
+Code Quality:
+
+Use clean and maintainable code.
+Avoid memory leaks and unnecessary dynamic allocations.
+Implementation Plan
+Class Design
+Private Member Functions:
+
+Each function (debug, info, warning, error) outputs its corresponding complaint message.
+Pointer to Member Functions:
+
+Use a std::string array for levels and an array of function pointers corresponding to the private functions.
+Public Member Function:
+
+complain:
+Search for the matching level in the std::string array.
+Call the corresponding function using the pointer-to-member array.
+Files and Structure
+Harl.hpp:
+
+Class definition.
+Harl.cpp:
+
+Implementation of the class.
+main.cpp:
+
+Test cases for the Harl class.
+Makefile:
+
+Build automation.

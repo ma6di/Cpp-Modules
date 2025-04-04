@@ -1,0 +1,70 @@
+The explicit keyword in C++ is used to prevent unintended 
+implicit conversions or type coercion when a constructor 
+is called.
+
+In the context of your example:
+
+cpp
+Copy code
+explicit Zombie(std::string name);
+This means that the Zombie constructor that takes a std::string as its parameter can only be called explicitly, not implicitly.
+
+Why Use explicit?
+Without the explicit keyword, a single-argument constructor can act as an implicit conversion operator. For example:
+
+cpp
+Copy code
+class Zombie {
+public:
+    Zombie(std::string name) : name(name) {}
+
+private:
+    std::string name;
+};
+
+int main() {
+    Zombie z = "Undead";  // Implicitly converts "Undead" (std::string) to a Zombie object
+    return 0;
+}
+In this code:
+
+The string "Undead" is automatically converted into a Zombie object because the constructor accepts a std::string.
+This might lead to unintended bugs, especially if you don't want your class to support such implicit conversions.
+With explicit
+If you declare the constructor as explicit:
+
+cpp
+Copy code
+class Zombie {
+public:
+    explicit Zombie(std::string name) : name(name) {}
+
+private:
+    std::string name;
+};
+
+int main() {
+    Zombie z = "Undead";  // Compilation error: no implicit conversion allowed
+    Zombie z2("Undead");  // Works fine: constructor called explicitly
+    return 0;
+}
+Here:
+
+Zombie z = "Undead"; will not compile because the explicit keyword prevents the compiler from using the constructor for implicit conversions.
+Zombie z2("Undead"); will work because the constructor is called explicitly.
+When to Use explicit
+You should use explicit:
+
+For Single-Argument Constructors: To avoid accidental implicit conversions.
+For Conversion Constructors: When a constructor can be used to convert one type into another, but you want to ensure it's only done explicitly.
+Benefits of explicit
+Prevents unintended or confusing code by avoiding implicit conversions.
+Improves code clarity and robustness.
+Helps enforce better programming practices by making conversions intentional and explicit.
+In your example, marking the Zombie constructor as explicit ensures that only code like Zombie z("Undead"); or Zombie z = Zombie("Undead"); is valid, which makes the behavior of your program clearer and safer.
+
+
+
+
+
+

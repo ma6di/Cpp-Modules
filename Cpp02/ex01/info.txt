@@ -1,0 +1,15 @@
+Here’s how you can implement Exercise 01: Towards a more useful fixed-point number class, adding the new functionality for handling integers and floating-point numbers.
+
+Plan
+Enhancements to the Fixed Class
+Add the following constructors:
+
+A constructor to accept an integer and convert it to a fixed-point value.
+A constructor to accept a floating-point number and convert it to a fixed-point value.
+Add the following member functions:
+
+toFloat: Converts the stored fixed-point value to a floating-point number.
+toInt: Converts the stored fixed-point value to an integer.
+Overload the insertion (<<) operator to output the fixed-point value as a floating-point representation.
+
+Update the main.cpp to test all new features.
