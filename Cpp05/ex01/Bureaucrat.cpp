@@ -58,15 +58,7 @@ const char* Bureaucrat::GradeTooLowException:: what() const throw()
 	return "Grade too low! (Min: 150)";
 }
 
-//This function is an overloaded version of the << (insertion) operator that 
-//allows us to output a Bureaucrat object using std::cout or other output streams like file streams.
-//std::ostream& os: This is the output stream (like std::cout) where the data will be written.
-//const Bureaucrat& b: This is the const reference to the Bureaucrat object whose details will be printed.
-//b.getName(): This is a getter function for the name attribute of the Bureaucrat object.
-//os <<: The << operator is used to send the name to the output stream os (which could be std::cout).
-//os << ", bureaucrat grade "; -> This is just a literal string that is printed along with the name.
-//return os; The output stream os is returned, which allows chaining of output statements. 
-//For example: -> std::cout << bureaucrat1 << bureaucrat2;
+
 
 void Bureaucrat::signForm(Form &form)
 {
@@ -81,7 +73,15 @@ void Bureaucrat::signForm(Form &form)
                   << " because " << e.what() << std::endl;
     }
 }
-
+//This function is an overloaded version of the << (insertion) operator that 
+//allows us to output a Bureaucrat object using std::cout or other output streams like file streams.
+//std::ostream& os: This is the output stream (like std::cout) where the data will be written.
+//const Bureaucrat& b: This is the const reference to the Bureaucrat object whose details will be printed.
+//b.getName(): This is a getter function for the name attribute of the Bureaucrat object.
+//os <<: The << operator is used to send the name to the output stream os (which could be std::cout).
+//os << ", bureaucrat grade "; -> This is just a literal string that is printed along with the name.
+//return os; The output stream os is returned, which allows chaining of output statements. 
+//For example: -> std::cout << bureaucrat1 << bureaucrat2;
 std::ostream& operator<<(std::ostream& os, const Bureaucrat& b)
 {
     os << b.getName() << ", bureaucrat grade " << b.getGrade() << ".";

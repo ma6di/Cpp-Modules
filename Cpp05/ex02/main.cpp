@@ -6,9 +6,12 @@
 
 
 
-
+/*Why use srand(time(0))?
+It seeds the randomness using the current time, which changes every 
+second — giving a new pattern every time you run the program. That’s much more realistic 
+randomness for something like "robotomy success or fail".*/
 int main() {
-    srand(time(NULL));
+    srand(time(0));
 
     Bureaucrat boss("Boss", 1);
     Bureaucrat intern("Intern", 150);

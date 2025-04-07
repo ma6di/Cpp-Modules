@@ -22,7 +22,8 @@ class Bureaucrat
 		//other contains the data we need to copy into the new object.
 		//Instead of making up a new name like source, other is a common convention.
 
-		Bureaucrat& operator = (const Bureaucrat& other);
+		//copy assignment operator constructor 
+		Bureaucrat& operator=(const Bureaucrat& other);
 		//Bureaucrat& / Return type: Returns a reference to *this (the current object).
 		//operator=	/ Overloaded assignment operator.
 		//(const Bureaucrat& other)	/ Takes a constant reference to another Bureaucrat object

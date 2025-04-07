@@ -2,7 +2,7 @@
 
 RobotomyRequestForm::RobotomyRequestForm(const std::string &target)
     : AForm("Robotomy Request", 72, 45), target(target) {}
-
+	
 void RobotomyRequestForm::execute(Bureaucrat const &executor) const {
     if (!getIsSigned())
         throw FormNotSignedException();

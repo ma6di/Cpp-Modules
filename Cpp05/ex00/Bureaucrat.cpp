@@ -35,7 +35,7 @@ int Bureaucrat::getGrade() const { return grade; }
 
 void Bureaucrat::incrementGrade()
 {
-	if(grade == 1)
+	if (grade == 1)
 		throw GradeTooHighException();
 	grade--;
 }

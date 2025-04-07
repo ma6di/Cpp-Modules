@@ -5,8 +5,19 @@
 #include <stdexcept>
 #include "Bureaucrat.hpp"
 
+/*
+You can use forward declarations when:
+	You're only using pointers or references to the forward-declared type.
+You cannot use forward declarations when:
+	You need the size or members of the class (e.g., creating an object or calling its methods directly)
+A forward declaration is when you tell the compiler:
+	“Hey, trust me — this class or struct exists. I’ll show you the full definition later.”*/
+
 class Bureaucrat; // Forward declaration
 
+//Using an abstract base class (like AForm) lets you define a common interface for
+// different forms while allowing each type of form to have its own specific behavior 
+//(like writing to a file, making noise, or printing a pardon). This gives you polymorphism, code reuse, and flexibility
 class AForm {
 private:
     const std::string name;
