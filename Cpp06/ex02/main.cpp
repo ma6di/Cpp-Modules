@@ -74,7 +74,8 @@ Base *generate(void)
 		return new C;
 }
 
-void identify(Base* p) {
+void identify(Base* p)
+{
 	if (dynamic_cast<A*>(p))
 		std::cout << "A" << std::endl;
 	else if (dynamic_cast<B*>(p))
@@ -85,7 +86,10 @@ void identify(Base* p) {
 		std::cout << "Unknown type" << std::endl;
 }
 
-void identify(Base& p) {
+//catch (...) catches any kind of exception
+//istaed of using const std::bad_cast& e)
+void identify(Base& p)
+{
 	try {
 		A& a = dynamic_cast<A&>(p);
 		(void)a;
