@@ -83,6 +83,7 @@ void	convertFloat(const std::string& str)
 	float	f = std::atof(str.c_str());
 	bool	tolerance = std::fabs(f - static_cast<int>(f)) < 0.0000000000001;
 
+	// CHAR
 	std::cout << "char: ";
 	if (f < 0 || f > 127)
 		std::cout << "impossible" << std::endl;
@@ -98,11 +99,13 @@ void	convertFloat(const std::string& str)
 		std::cout << "impossible" << std::endl;
 	else
 		std::cout << static_cast<int>(f) << std::endl;
+    //  FLOAT
 	std::cout << "float: ";
 	if (f < MIN_FLOAT || f > MAX_FLOAT)
 		std::cout << "impossible" << std::endl;
 	else
 		std::cout << f << (tolerance ? ".0f" : "f") << std::endl;
+    // DOUBLE
 	std::cout << "double: " << static_cast<double>(f) << (tolerance ? ".0" : "") << std::endl;
 }
 
@@ -111,6 +114,7 @@ void	convertDouble(const std::string& str)
 	double		d = std::atof(str.c_str());
 	bool		tolerance = std::fabs(d - static_cast<int>(d)) < 0.0000000000001;
 
+	// CHAR
 	std::cout << "char: ";
 	if (d < 0 || d > 127)
 		std::cout << "impossible" << std::endl;
@@ -121,16 +125,19 @@ void	convertDouble(const std::string& str)
 		else 
 			std::cout << "Non displayable" << std::endl;
 	}
+    // INT
 	std::cout << "int: ";
 	if (d < MIN_INT || d > MAX_INT)
 		std::cout << "impossible" << std::endl;
 	else
 		std::cout << static_cast<int>(d) << std::endl;
+    //  FLOAT
 	std::cout << "float: ";
 	if (d < MIN_FLOAT || d > MAX_FLOAT)
 		std::cout << "impossible" << std::endl;
 	else
 		std::cout << static_cast<float>(d) << (tolerance ? ".0f" : "f") << std::endl;
+    //  DOUBLE
 	std::cout << "double: ";
 	if (d < MIN_DOUBLE || d > MAX_DOUBLE)
 		std::cout << "impossible" << std::endl;

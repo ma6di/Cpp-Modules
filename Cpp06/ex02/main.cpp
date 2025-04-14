@@ -7,6 +7,61 @@
 #include <cstdlib>
 #include <ctime>
 
+/*What is dynamic_cast?
+dynamic_cast is used in C++ to safely convert pointers or references within an inheritance hierarchy, 
+typically when you have a base class pointer/reference and want to know what the actual derived type is.
+It checks the actual runtime type of the object and returns the appropriate result or throws an exception.
+
+It requires:
+ - The base class to have at least one virtual function (usually a virtual destructor is enough).
+ - RTTI (Run-Time Type Information) to be enabled (it is by default).
+ 
+dynamic_cast with Pointers
+If successful:
+Returns a valid pointer of type A*.
+If failed:
+Returns nullptr.
+So, with a pointer, you check if it's nullptr to see if the cast worked.
+
+dynamic_cast with References
+If successful:
+You get a reference to A.
+If failed:
+It throws a std::bad_cast exception.
+So you must use a try-catch block.
+
+Type	     Success Result	           Failure Result	      Requires try/catch
+Pointer	     Returns valid pointer	   Returns nullptr	      No
+Reference	 Returns valid reference   Throws std::bad_cast	  Yes
+*/
+
+
+/*What is static_cast?
+static_cast is a compile-time cast in C++. It’s used for conversions that are well-defined 
+and don't require runtime type checking. Unlike dynamic_cast, it does not check the actual 
+type at runtime, so it’s faster, but also riskier if used incorrectly.*/
+
+
+
+/*When to Use What?
+✅ Use static_cast when:
+You are sure of the types.
+You are going up the hierarchy (Derived → Base).
+You are converting between primitives (e.g., float → int).
+
+✅ Use dynamic_cast when:
+You are going down the hierarchy (Base → Derived).
+You aren’t sure of the actual type.
+You need runtime safety.*/
+
+/*Compared to dynamic_cast
+Featuren  	               static_cast		 dynamic_cast
+Runtime type check	       ❌ No              ✅ Yes
+Works with polymorphism	   ✅ Yes	         ✅ Yes (requires virtual func)
+Throws exception	       ❌ No	             ✅ Yes (with reference)
+Returns nullptr	           ❌ Never	         ✅ Yes (with pointer)
+Speed                      🚀 Faster	      🐢 Slower (runtime check)
+Safe for downcasting	   ❌ Risky	         ✅ Safe*/
 Base *generate(void)
 {
 	std::srand(static_cast<unsigned>(std::time(nullptr)));
