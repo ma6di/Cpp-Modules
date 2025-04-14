@@ -81,6 +81,34 @@ void convertInt(const std::string& str)
 void	convertFloat(const std::string& str)
 {
 	float	f = std::atof(str.c_str());
+	/*This line checks whether the float f is "very close" to an integer — 
+	within a very tiny margin (tolerance) due to floating-point imprecision.
+
+	1. static_cast<int>(f)
+	This converts the float f to an integer, effectively removing the decimal part (truncates toward zero).
+	For example:
+	f = 42.0000001  →  static_cast<int>(f) = 42
+	f = 7.9999999   →  static_cast<int>(f) = 7
+
+	2. f - static_cast<int>(f)
+	This gives you the decimal (fractional) part of the float.
+	For example:
+	f = 42.3       →  f - 42  = 0.3
+	f = 7.0000001  →  f - 7   = ~0.0000001
+
+	3. std::fabs(...)
+	This gives the absolute value, so that you're always comparing a positive number.
+	For example:
+	f = -42.0000001 → static_cast<int>(f) = -42
+	fabs(-42.0000001 - (-42)) = fabs(-0.0000001) = 0.0000001
+	4. < 0.0000000000001
+	This is the tolerance threshold, saying:
+
+	“If the fractional part is less than this, we’ll consider the float to be effectively an integer.”
+
+	This helps avoid situations where due to floating-point precision limits, a value like 42.0 might 
+	internally be 41.999999999999996.
+*/
 	bool	tolerance = std::fabs(f - static_cast<int>(f)) < 0.0000000000001;
 
 	// CHAR

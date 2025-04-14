@@ -75,6 +75,13 @@ e_type  whichType(const std::string& str, size_t& len)
 {
     size_t  dot = str.find('.');
     size_t  f = str.find('f');
+
+	/*static const size_t npos = -1;
+		It's a constant of type std::string::size_type (which is usually size_t).
+		It is the largest possible value for size_t, which means it’s guaranteed to be greater
+		 than the length of any string.
+		It is used to indicate “not found” in string search operations.*/
+	//If "." "f" is not in the string, .find() returns npos (== std::string::npos)
     if (dot == std::string::npos)
     {
         if (isSpecial(str))
@@ -87,7 +94,7 @@ e_type  whichType(const std::string& str, size_t& len)
     if (f != std::string::npos && dot != std::string::npos)
     {
         if (isFloat(str, len, dot))
-        return FLOAT;
+        	return FLOAT;
     }
     else if (f == std::string::npos && dot != std::string::npos)
         return DOUBLE;
