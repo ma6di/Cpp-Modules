@@ -1,16 +1,25 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ScalarConverter.cpp                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mcheragh <mcheragh@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/15 14:17:57 by mcheragh          #+#    #+#             */
+/*   Updated: 2025/04/15 14:21:24 by mcheragh         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "ScalarConverter.hpp"
 
-ScalarConverter::ScalarConverter(void)
-{ }
+ScalarConverter::ScalarConverter(void){}
 
 ScalarConverter::ScalarConverter(ScalarConverter const &src)
 {
     *this = src;
 }
 
-ScalarConverter::~ScalarConverter(void)
-{ }
+ScalarConverter::~ScalarConverter(void){}
 
 ScalarConverter	&ScalarConverter::operator=(ScalarConverter const &rhs)
 {

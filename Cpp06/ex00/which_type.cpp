@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   which_type.cpp                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mcheragh <mcheragh@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/15 14:18:09 by mcheragh          #+#    #+#             */
+/*   Updated: 2025/04/15 14:19:10 by mcheragh         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "ScalarConverter.hpp"
 
@@ -71,17 +82,17 @@ static int	isFloat(const std::string& str, size_t& len, size_t& dot)
 	return 1;
 }
 
+/*static const size_t npos = -1;
+	It's a constant of type std::string::size_type (which is usually size_t).
+	It is the largest possible value for size_t, which means it’s guaranteed to be greater
+		than the length of any string.
+	It is used to indicate “not found” in string search operations.*/
+//If "." "f" is not in the string, .find() returns npos (== std::string::npos)
 e_type  whichType(const std::string& str, size_t& len)
 {
     size_t  dot = str.find('.');
     size_t  f = str.find('f');
-
-	/*static const size_t npos = -1;
-		It's a constant of type std::string::size_type (which is usually size_t).
-		It is the largest possible value for size_t, which means it’s guaranteed to be greater
-		 than the length of any string.
-		It is used to indicate “not found” in string search operations.*/
-	//If "." "f" is not in the string, .find() returns npos (== std::string::npos)
+	
     if (dot == std::string::npos)
     {
         if (isSpecial(str))

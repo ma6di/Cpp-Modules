@@ -6,15 +6,11 @@
 /*   By: mcheragh <mcheragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 11:02:10 by mcheragh          #+#    #+#             */
-/*   Updated: 2025/04/15 13:17:38 by mcheragh         ###   ########.fr       */
+/*   Updated: 2025/04/15 14:20:52 by mcheragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ScalarConverter.hpp"
-#include <cstdlib>
-#include <cerrno>  // For errno
-#include <sstream>
-#include <cfloat> 
 
 void	printSpecial(const std::string& str)
 {
@@ -62,16 +58,16 @@ void	convertChar(const std::string& str, size_t& len)
 		std::cout << "Non displayable" << std::endl;
 }
 
-void convertInt(const std::string& str)
-{
-	int		impossible = 0;
-    char* end;
-    errno = 0;
 	//.c_str() gives you a C-style null-terminated string (const char*) — which is required by strtol.
 	//end is a pointer to char*. 
 	//After conversion, strtol updates end to point to the first invalid character in the string.
 	// 10 is the numerical base to use for conversion.
-    long l = std::strtol(str.c_str(), &end, 10);
+void convertInt(const std::string& str)
+{
+	int		impossible = 0;
+    char* 	end;
+    errno = 0;
+    long	l = std::strtol(str.c_str(), &end, 10);
 	
 	// CHAR
 	std::cout << "char: ";
@@ -88,13 +84,11 @@ void convertInt(const std::string& str)
 	{
 		std::cout << "impossible" << std::endl;
 		impossible = 1;
-		
 	}
     else
 		std::cout << static_cast<int>(l) << std::endl;
 
 	//  FLOAT
-
 	std::cout << "float: ";
 	if (impossible)
 		std::cout << "impossible" << std::endl;
@@ -138,19 +132,13 @@ void convertFloat(const std::string& str)
 		impossible = 1;
 	}
 	else
-	{
 		std::cout << "float: " << f << (tolerance ? ".0f" : "f") << std::endl;
-	}
 	
     // DOUBLE
 	if (f > MAX_DOUBLE || f < MIN_DOUBLE || impossible)
-	{
 		std::cout << "double: impossible" << std::endl;
-	}
 	else
-	{
 		std::cout << "double: " << static_cast<double>(f) << (tolerance ? ".0" : "") << std::endl;
-	}
 }
 
 void convertDouble(const std::string& str)
@@ -183,12 +171,7 @@ void convertDouble(const std::string& str)
 
     // DOUBLE
     if (d > DBL_MAX || d < -DBL_MAX)
-	{
 		std::cout << "double: impossible" << std::endl;
-	}
 	else
-	{
 		std::cout << "double: " << d << (tolerance ? ".0" : "") << std::endl;
-	}
 }
-

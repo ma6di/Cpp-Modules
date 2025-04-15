@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ScalarConverter.hpp                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mcheragh <mcheragh@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/15 14:18:03 by mcheragh          #+#    #+#             */
+/*   Updated: 2025/04/15 14:18:05 by mcheragh         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #ifndef SCALARCONVERTER_HPP
 # define SCALARCONVERTER_HPP
@@ -8,6 +19,9 @@
 # include <cstdlib>
 # include <limits>
 # include <cmath>
+# include <cerrno>
+# include <sstream>
+# include <cfloat> 
 
 # define MIN_INT std::numeric_limits<int>::min() //-2147483648
 # define MAX_INT std::numeric_limits<int>::max() //2147483647
