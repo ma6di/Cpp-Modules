@@ -6,7 +6,7 @@
 /*   By: mcheragh <mcheragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 11:02:10 by mcheragh          #+#    #+#             */
-/*   Updated: 2025/04/15 14:20:52 by mcheragh         ###   ########.fr       */
+/*   Updated: 2025/04/16 15:17:20 by mcheragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,9 +105,10 @@ void convertInt(const std::string& str)
 
 void convertFloat(const std::string& str)
 {
-	int		impossible = 0;
-	float	f = std::atof(str.c_str());
-	bool	tolerance = std::fabs(f - static_cast<int>(f)) < 0.0000000000001;
+    errno = 0;
+    int impossible = 0;
+    float f = std::atof(str.c_str());
+    bool tolerance = std::fabs(f - static_cast<int>(f)) < 0.0000000000001;
 
     // CHAR
     std::cout << "char: ";
@@ -120,31 +121,32 @@ void convertFloat(const std::string& str)
 
     // INT
     std::cout << "int: ";
-    if (f < MIN_INT || f > MAX_INT)
+    if (f < std::numeric_limits<int>::min() || f > std::numeric_limits<int>::max())
         std::cout << "impossible" << std::endl;
     else
-		std::cout << static_cast<int>(f) << std::endl;
+        std::cout << static_cast<int>(f) << std::endl;
 
     // FLOAT
-	if (f > MAX_FLOAT || f < MIN_FLOAT)
-	{
-		std::cout << "float: impossible" << std::endl;
-		impossible = 1;
-	}
-	else
-		std::cout << "float: " << f << (tolerance ? ".0f" : "f") << std::endl;
-	
+    if (f > std::numeric_limits<float>::max() || f < -std::numeric_limits<float>::max() || errno == ERANGE)
+    {
+        std::cout << "float: impossible" << std::endl;
+        impossible = 1;
+    }
+    else
+        std::cout << "float: " << f << (tolerance ? ".0f" : "f") << std::endl;
+
     // DOUBLE
-	if (f > MAX_DOUBLE || f < MIN_DOUBLE || impossible)
-		std::cout << "double: impossible" << std::endl;
-	else
-		std::cout << "double: " << static_cast<double>(f) << (tolerance ? ".0" : "") << std::endl;
+    if (f > std::numeric_limits<double>::max() || f < -std::numeric_limits<double>::max() || impossible)
+        std::cout << "double: impossible" << std::endl;
+    else
+        std::cout << "double: " << static_cast<double>(f) << (tolerance ? ".0" : "") << std::endl;
 }
 
 void convertDouble(const std::string& str)
 {
-	double		d = std::atof(str.c_str());
-	bool		tolerance = std::fabs(d - static_cast<int>(d)) < 0.0000000000001;
+    errno = 0;
+    double d = std::atof(str.c_str());
+    bool tolerance = std::fabs(d - static_cast<int>(d)) < 0.0000000000001;
 
     // CHAR
     std::cout << "char: ";
@@ -157,21 +159,23 @@ void convertDouble(const std::string& str)
 
     // INT
     std::cout << "int: ";
-    if (d < MIN_INT || d > MAX_INT)
+    if (d < std::numeric_limits<int>::min() || d > std::numeric_limits<int>::max())
         std::cout << "impossible" << std::endl;
     else
         std::cout << static_cast<int>(d) << std::endl;
 
     // FLOAT
     std::cout << "float: ";
-    if (d < MIN_FLOAT || d > MAX_FLOAT || d > DBL_MAX || d < -DBL_MAX)
+    if (d < std::numeric_limits<float>::min() || d > std::numeric_limits<float>::max() || errno == ERANGE)
         std::cout << "impossible" << std::endl;
     else
         std::cout << static_cast<float>(d) << (tolerance ? ".0f" : "f") << std::endl;
 
     // DOUBLE
-    if (d > DBL_MAX || d < -DBL_MAX)
-		std::cout << "double: impossible" << std::endl;
-	else
-		std::cout << "double: " << d << (tolerance ? ".0" : "") << std::endl;
+    if (d > std::numeric_limits<double>::max() || d < -std::numeric_limits<double>::max() || errno == ERANGE)
+        std::cout << "double: impossible" << std::endl;
+    else
+        std::cout << "double: " << d << (tolerance ? ".0" : "") << std::endl;
 }
+
+
