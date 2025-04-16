@@ -6,7 +6,7 @@
 /*   By: mcheragh <mcheragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 14:18:09 by mcheragh          #+#    #+#             */
-/*   Updated: 2025/04/15 14:19:10 by mcheragh         ###   ########.fr       */
+/*   Updated: 2025/04/16 14:18:34 by mcheragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,23 +63,66 @@ For the first character str[0], it allows a digit OR a sign (+ or -).
 Second loop walks forward from the character after the dot to the end of the string.
 It expects only digits, except one trailing 'f' at the end.
 If 'f' is present, it must be the last character (i == len - 1), or else it's invalid.*/
-static int	isFloat(const std::string& str, size_t& len, size_t& dot)
-{
-	for (int j = dot - 1; j >= 0; j--)
-	{
-		if (!isdigit(str[j]) && j != 0)
-			return 0;
-		if (!isdigit(str[j]) && j == 0 && str[j] != '+' && str[j] != '-')
-			return 0;
-	}
-	for (size_t i = dot + 1; i < len; i++)
-	{
-		if (!isdigit(str[i]) && str[i] != 'f')
-			return 0;
-		if (str[i] == 'f' && i != len - 1)
-			return 0;
-	}
-	return 1;
+static int isFloat(const std::string& str, size_t& len, size_t& dot) {
+    if (dot == std::string::npos || dot == 0 || dot == len - 1)
+        return 0;
+
+    size_t decimalCount = 0;
+    size_t i = 0;
+
+    // Handle optional sign
+    if (str[i] == '+' || str[i] == '-')
+        i++;
+    // Digits before dot
+    for (; i < dot; ++i) {
+        if (!isdigit(str[i]))
+            return 0;
+    }
+    // Digits after dot
+    i = dot + 1;
+    for (; i < len; ++i) {
+        if (str[i] == 'f' && i == len - 1)
+            break; // allow trailing 'f'
+        if (!isdigit(str[i]))
+            return 0;
+        decimalCount++;
+    }
+    // Check if 'f' is present and only at the end
+    if (str[len - 1] != 'f')
+        return 0;
+    // Optional: enforce float precision limit (~7 decimal digits)
+    if (decimalCount > 7)
+        return 0;
+    return 1;
+}
+
+static int isDouble(const std::string& str, size_t& len, size_t& dot) {
+    if (dot == std::string::npos || dot == 0 || dot == len - 1)
+        return 0;
+
+    size_t decimalCount = 0;
+    size_t i = 0;
+
+    // Handle optional sign
+    if (str[i] == '+' || str[i] == '-')
+        i++;
+    // Digits before dot
+    for (; i < dot; ++i) {
+        if (!isdigit(str[i]))
+            return 0;
+    }
+    // Digits after dot
+    i = dot + 1;
+    for (; i < len; ++i) {
+        if (!isdigit(str[i]))
+            return 0;
+        decimalCount++;
+    }
+    // Optional: enforce double precision limit (~15 decimal digits)
+    if (decimalCount > 15)
+        return 0;
+
+    return 1;
 }
 
 /*static const size_t npos = -1;
@@ -108,6 +151,9 @@ e_type  whichType(const std::string& str, size_t& len)
         	return FLOAT;
     }
     else if (f == std::string::npos && dot != std::string::npos)
-        return DOUBLE;
+	{
+		if(isDouble(str, len, dot))
+        	return DOUBLE;
+	}
     return INVALID;
 }

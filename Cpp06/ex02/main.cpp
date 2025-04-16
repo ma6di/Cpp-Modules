@@ -10,7 +10,7 @@
 /*What is dynamic_cast?
 dynamic_cast is used in C++ to safely convert pointers or references within an inheritance hierarchy, 
 typically when you have a base class pointer/reference and want to know what the actual derived type is.
-It checks the actual runtime type of the object and returns the appropriate result or throws an exception.
+It checks the actual runtime type of the object and returns the appropriate result or throws an exception.*/
 
 
 /*What is static_cast?
@@ -20,7 +20,6 @@ type at runtime, so it’s faster, but also riskier if used incorrectly.*/
 
 Base *generate(void)
 {
-	std::srand(static_cast<unsigned>(std::time(NULL)));
 	int i = rand() % 3;
 	if (i == 0)
 		return new A;
@@ -67,8 +66,9 @@ void identify(Base& p)
 	}
 }
 
-int main() {
-
+int main()
+{
+	std::srand(static_cast<unsigned>(std::time(NULL)));
     // Generate and test multiple times
     for (int i = 0; i < 5; ++i) {
         std::cout << "Test " << i + 1 << ":" << std::endl;
