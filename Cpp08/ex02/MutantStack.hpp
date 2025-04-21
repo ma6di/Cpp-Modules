@@ -12,6 +12,8 @@ public:
 
     MutantStack<T>& operator=(const MutantStack<T>& other);
 
+	/*std::stack is built on top of another container (usually std::deque).
+	We access that underlying container’s iterator type and alias it as iterator.*/
     typedef typename std::stack<T>::container_type::iterator iterator;
     typedef typename std::stack<T>::container_type::const_iterator const_iterator;
     typedef typename std::stack<T>::container_type::reverse_iterator reverse_iterator;

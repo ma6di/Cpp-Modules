@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include "MutantStack.hpp"
 
@@ -6,34 +5,38 @@ int main()
 {
     MutantStack<int> mstack;
 
-    mstack.push(5);
-    mstack.push(17);
+    // Push a variety of elements
+    for (int i = 1; i <= 10; ++i)
+        mstack.push(i * 10); // Push 10, 20, ..., 100
 
     std::cout << "Top: " << mstack.top() << std::endl;
+    std::cout << "Size: " << mstack.size() << std::endl;
 
+    std::cout << "\nForward iteration:" << std::endl;
+    for (MutantStack<int>::iterator it = mstack.begin(); it != mstack.end(); ++it)
+        std::cout << *it << " ";
+    std::cout << std::endl;
+
+    std::cout << "\nReverse iteration:" << std::endl;
+    for (MutantStack<int>::reverse_iterator rit = mstack.rbegin(); rit != mstack.rend(); ++rit)
+        std::cout << *rit << " ";
+    std::cout << std::endl;
+
+    // Copy to const MutantStack to demonstrate const_reverse_iterator
+    const MutantStack<int> constStack = mstack;
+
+    std::cout << "\nConst Reverse iteration:" << std::endl;
+    for (MutantStack<int>::const_reverse_iterator crit = constStack.rbegin(); crit != constStack.rend(); ++crit)
+        std::cout << *crit << " ";
+    std::cout << std::endl;
+
+    // Pop a few elements
+    mstack.pop();
     mstack.pop();
 
-	//.top() → returns a reference to the top (most recently pushed) element in the stack.
-    std::cout << "Size after pop: " << mstack.size() << std::endl;
+    std::cout << "\nAfter popping two elements:" << std::endl;
+    std::cout << "Top: " << mstack.top() << std::endl;
+    std::cout << "Size: " << mstack.size() << std::endl;
 
-    mstack.push(3);
-    mstack.push(5);
-    mstack.push(737);
-    mstack.push(0);
-
-    MutantStack<int>::iterator it = mstack.begin();
-    MutantStack<int>::iterator ite = mstack.end();
-
-    ++it;
-    --it;
-
-    std::cout << "Iterating through stack:" << std::endl;
-    while (it != ite)
-    {
-        std::cout << *it << std::endl;
-        ++it;
-    }
-
-    std::stack<int> s(mstack);  // Also test conversion to std::stack
     return 0;
 }

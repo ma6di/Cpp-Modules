@@ -4,6 +4,13 @@
 template <typename T>
 MutantStack<T>::MutantStack() {}
 
+// copy constructor
+/*
+ Why the : std::stack<T>(other)?
+That’s the member initializer list. It tells C++:
+“Use the std::stack copy constructor to initialize the base class part of this object.”
+Since MutantStack inherits from std::stack, the base class (std::stack<T>) needs to be 
+constructed as well — and this is how you do that cleanly.*/
 template <typename T>
 MutantStack<T>::MutantStack(const MutantStack<T>& other) : std::stack<T>(other) {}
 
@@ -16,6 +23,8 @@ MutantStack<T>& MutantStack<T>::operator=(const MutantStack<T>& other) {
     return *this;
 }
 
+/*this->c: std::stack has a protected member c, which holds the actual container (like deque or vector).
+You call begin() and end() on it to access iterators.*/
 template <typename T>
 typename MutantStack<T>::iterator MutantStack<T>::begin() {
     return this->c.begin();
