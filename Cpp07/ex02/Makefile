@@ -6,7 +6,7 @@
 #    By: mcheragh <mcheragh@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/22 12:45:45 by mcheragh          #+#    #+#              #
-#    Updated: 2025/04/22 12:45:47 by mcheragh         ###   ########.fr        #
+#    Updated: 2025/04/22 15:14:16 by mcheragh         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,8 +32,7 @@ clean:
 fclean: clean
 	rm -f $(NAME)
 
-re:
-	fclean all
+re: fclean all
 
 .PHONY: all clean fclean re
 
