@@ -1,9 +1,20 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: mcheragh <mcheragh@student.42.fr>          +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2025/04/22 14:08:18 by mcheragh          #+#    #+#              #
+#    Updated: 2025/04/22 14:14:51 by mcheragh         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
 
 C++ = c++
 C++_FLAGS = -Wall -Werror -Wextra -std=c++98
 SRC = main.cpp
 
-OBJ = $(SRC: .cpp = .o)
+OBJ = $(SRC:.cpp=.o)
 
 NAME = Easy_find
 
@@ -21,8 +32,6 @@ clean:
 fclean : clean
 	rm -f $(NAME)
 
-re:
-	fclean all
+re: fclean all
 
 .PHONY: all clean fclean re
-

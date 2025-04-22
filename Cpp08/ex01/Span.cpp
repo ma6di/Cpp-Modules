@@ -1,16 +1,30 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Span.cpp                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mcheragh <mcheragh@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/22 14:10:10 by mcheragh          #+#    #+#             */
+/*   Updated: 2025/04/22 15:21:28 by mcheragh         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "Span.hpp"
 
 Span::Span(unsigned int N) : _N(N) {}
 Span::~Span() {}
 
-void Span::addNumber(int num) {
+void Span::addNumber(int num)
+{
     if (_container.size() >= _N)
         throw SpanIsFullException();
     _container.push_back(num);
 }
 
 //container.insert(position_iterator, start_iterator, end_iterator);
-void Span::addNumbers(std::vector<int>::iterator begin, std::vector<int>::iterator end) {
+void Span::addNumbers(std::vector<int>::iterator begin, std::vector<int>::iterator end)
+{
     if (_container.size() + std::distance(begin, end) > _N)
         throw SpanIsFullException();
     _container.insert(_container.end(), begin, end);
@@ -28,7 +42,6 @@ void Span::addNumbersRange(int start, int end)
         _container.push_back(i);
     }
 }
-
 
 int Span::shortestSpan() const {
     if (_container.size() < 2)
