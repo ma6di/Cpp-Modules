@@ -11,7 +11,7 @@ private:
 
 public:
     // Default constructor: creates empty array
-    Array() : _data(nullptr), _size(0) {}
+    Array() : _data(NULL), _size(0) {}
 
     // Constructor with size parameter
     Array(unsigned int n) : _data(new T[n]()), _size(n) {}
