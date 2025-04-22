@@ -38,7 +38,7 @@ int main()
     std::string s1 = "apple", s2 = "banana";
 	std::cout << "s1 = " << s1 << std::endl;
 	std::cout << "s2 = " << s2 << std::endl;
-    std::cout << "min(s1, s2) = " << myMax(s1, s2) << std::endl;
+    std::cout << "min(s1, s2) = " << myMin(s1, s2) << std::endl;
     std::cout << "max(s1, s2) = " << myMax(s1, s2) << std::endl;
     swap(s1, s2);
     std::cout << "swapped: s1=" << s1 << ", s2=" << s2 << std::endl << std::endl;
