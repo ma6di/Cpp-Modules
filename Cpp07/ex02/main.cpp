@@ -1,27 +1,72 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.cpp                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mcheragh <mcheragh@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/22 12:45:39 by mcheragh          #+#    #+#             */
+/*   Updated: 2025/04/22 14:44:54 by mcheragh         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include <iostream>
+#include <string>
 #include "Array.hpp"
 
+class Person
+{
+	private:
+		std::string _name;
+	
+	public:
+		Person() : _name("Unnamed") {}
+		Person(const std::string& name) : _name(name) {}
+		Person(const Person& other) : _name(other._name) {}
+	
+		Person& operator=(const Person& other)
+		{
+			if (this != &other)
+				_name = other._name;
+			return *this;
+		}
+	
+		std::string getName() const { return _name; }
+};
+	
 int main()
 {
-    try {
-        Array<int> a(3);
-        a[0] = 10;
-        a[1] = 20;
-        a[2] = 30;
+	// Test with int (simple type)
+	Array<int> intArray(3);
+	intArray[0] = 10;
+	intArray[1] = 20;
+	intArray[2] = 30;
 
-        std::cout << "Array size: " << a.size() << "\n";
+	std::cout << "Int array: ";
+	for (unsigned int i = 0; i < intArray.size(); ++i)
+		std::cout << intArray[i] << " ";
+	std::cout << "\n";
 
-        for (unsigned int i = 0; i < a.size(); ++i)
-            std::cout << "a[" << i << "] = " << a[i] << "\n";
+	// Test with std::string
+	Array<std::string> strArray(2);
+	strArray[0] = "hello";
+	strArray[1] = "world";
 
-        // Trigger exception
-        std::cout << "Trying to access a[3]:\n";
-        std::cout << a[3] << "\n"; // This will throw
-    }
-    catch (const std::exception& e) {
-        std::cerr << "Exception: " << e.what() << "\n";
-    }
+	std::cout << "String array: ";
+	for (unsigned int i = 0; i < strArray.size(); ++i)
+		std::cout << strArray[i] << " ";
+	std::cout << "\n";
 
-    return 0;
+	// Test with Person
+	Array<Person> personArray(2);
+	personArray[0] = Person("Alice");
+	personArray[1] = Person("Bob");
+
+	std::cout << "Person array: ";
+	for (unsigned int i = 0; i < personArray.size(); ++i)
+		std::cout << personArray[i].getName() << " ";
+	std::cout << "\n";
+		
+	return 0;
 }
+	

@@ -1,5 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Array.hpp                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mcheragh <mcheragh@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/22 12:45:33 by mcheragh          #+#    #+#             */
+/*   Updated: 2025/04/22 12:45:35 by mcheragh         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #pragma once
+
 #include <stdexcept> // For std::out_of_range
 
 template <typename T>
@@ -10,60 +22,16 @@ private:
     unsigned int _size;
 
 public:
-    // Default constructor: creates empty array
-    Array() : _data(NULL), _size(0) {}
+    Array();                             // Default constructor
+    Array(unsigned int n);              // Constructor with size
+    Array(const Array& other);          // Copy constructor
+    Array& operator=(const Array& other); // Assignment operator
+    ~Array();                           // Destructor
 
-    // Constructor with size parameter
-    Array(unsigned int n) : _data(new T[n]()), _size(n) {}
+    T& operator[](unsigned int index);             // Subscript operator
+    const T& operator[](unsigned int index) const; // Const version
 
-    // Copy constructor (deep copy)
-    Array(const Array& other) : _data(new T[other._size]), _size(other._size)
-    {
-        for (unsigned int i = 0; i < _size; ++i)
-            _data[i] = other._data[i];
-    }
-
-    // Assignment operator (deep copy)
-    Array& operator=(const Array& other)
-    {
-        if (this != &other)
-        {
-            delete[] _data;
-            _size = other._size;
-            _data = new T[_size];
-            for (unsigned int i = 0; i < _size; ++i)
-                _data[i] = other._data[i];
-        }
-        return *this;
-    }
-
-    // Destructor
-    ~Array()
-    {
-        delete[] _data;
-    }
-
-    // Access operator with bounds check
-	/*The access operator refers to the subscript operator operator[], 
-	which lets you access elements of your class like an array*/
-    T& operator[](unsigned int index)
-    {
-        if (index >= _size)
-            throw std::out_of_range("Index out of range");
-        return _data[index];
-    }
-
-    // Const version of access operator
-    const T& operator[](unsigned int index) const
-    {
-        if (index >= _size)
-            throw std::out_of_range("Index out of range");
-        return _data[index];
-    }
-
-    // Size getter
-    unsigned int size() const
-    {
-        return _size;
-    }
+    unsigned int size() const;          // Size getter
 };
+
+#include "Array.tpp"  // Include the implementation at the end

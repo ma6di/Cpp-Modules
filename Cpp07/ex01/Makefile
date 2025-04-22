@@ -1,3 +1,14 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: mcheragh <mcheragh@student.42.fr>          +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2025/04/22 12:46:03 by mcheragh          #+#    #+#              #
+#    Updated: 2025/04/22 12:46:04 by mcheragh         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
 
 C++ = c++
 C++_FLAGS = -Wall -Wextra -Werror -std=c++98
@@ -21,8 +32,7 @@ clean:
 fclean: clean
 	rm -f $(NAME)
 
-re:
-	fclean all
+re: fclean all
 
 .PHONY: all clean fclean re
 

@@ -1,20 +1,42 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   iter.hpp                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mcheragh <mcheragh@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/22 12:45:53 by mcheragh          #+#    #+#             */
+/*   Updated: 2025/04/22 14:35:11 by mcheragh         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #pragma once
 
 #include <iostream>
 
+// For const arrays — calls a function that takes a const reference
 template <typename T>
-void iter(T *array, int len, void (*f)(T&))
+void iter(const T* array, int len, void (*f)(const T&))
 {
     for (int i = 0; i < len; i++)
     {
-        f(array[i]);  // Apply the function 'f' to each element in the array by reference
+        f(array[i]);
+    }
+}
+
+// For non-const arrays — calls a function that takes a non-const reference
+template <typename T>
+void iter(T* array, int len, void (*f)(T&))
+{
+    for (int i = 0; i < len; i++)
+    {
+        f(array[i]);
     }
 }
 
 // Function to print the element
 template <typename T>
-void printElement(T elem)
+void printElement(const T &elem)
 {
     std::cout << elem << " ";
 }
@@ -26,9 +48,10 @@ void doubleElement(T &elem)
     elem = elem * 2;  // Modify the element by reference (double it)
 }
 
-// Overload to handle the doubling function on non-reference types.
 template <typename T>
-void doubleElementConst(T elem)
+void doubleStrElement(T &elem)
 {
-    std::cout << elem * 2 << " ";
+	elem = elem + elem;
 }
+
+
