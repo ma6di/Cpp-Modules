@@ -6,7 +6,7 @@
 /*   By: mcheragh <mcheragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 14:10:14 by mcheragh          #+#    #+#             */
-/*   Updated: 2025/04/22 14:10:15 by mcheragh         ###   ########.fr       */
+/*   Updated: 2025/04/23 16:09:32 by mcheragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@ private:
 public:
     Span(unsigned int N);
     ~Span();
+	Span(const Span &other);
+	Span &operator=(const Span &other);
 
     void addNumber(int num);
     void addNumbers(std::vector<int>::iterator begin, std::vector<int>::iterator end);

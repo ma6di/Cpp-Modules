@@ -6,14 +6,30 @@
 /*   By: mcheragh <mcheragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 14:10:10 by mcheragh          #+#    #+#             */
-/*   Updated: 2025/04/22 15:21:28 by mcheragh         ###   ########.fr       */
+/*   Updated: 2025/04/23 16:11:45 by mcheragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Span.hpp"
 
 Span::Span(unsigned int N) : _N(N) {}
+
 Span::~Span() {}
+
+Span::Span(const Span &other)
+{
+	*this = other;
+}
+
+Span &Span::operator=(const Span &other)
+{
+	if (this != &other)
+	{
+		_N = other._N;
+		_container = other._container;
+	}
+	return (*this);
+};
 
 void Span::addNumber(int num)
 {
