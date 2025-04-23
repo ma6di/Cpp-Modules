@@ -6,7 +6,7 @@
 /*   By: mcheragh <mcheragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 12:45:39 by mcheragh          #+#    #+#             */
-/*   Updated: 2025/04/22 14:44:54 by mcheragh         ###   ########.fr       */
+/*   Updated: 2025/04/23 13:40:22 by mcheragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,13 +36,20 @@ class Person
 	
 int main()
 {
+	// Test with empty Array
+	std::cout << "Empty Array: ";
+	Array<int> emptyArray(3);
+	for (unsigned int i = 0; i < emptyArray.size(); ++i)
+		std::cout << emptyArray[i] << " ";
+	std::cout << "\n";
+
 	// Test with int (simple type)
 	Array<int> intArray(3);
 	intArray[0] = 10;
 	intArray[1] = 20;
 	intArray[2] = 30;
 
-	std::cout << "Int array: ";
+	std::cout << "Int Array: ";
 	for (unsigned int i = 0; i < intArray.size(); ++i)
 		std::cout << intArray[i] << " ";
 	std::cout << "\n";
@@ -52,7 +59,7 @@ int main()
 	strArray[0] = "hello";
 	strArray[1] = "world";
 
-	std::cout << "String array: ";
+	std::cout << "String Array: ";
 	for (unsigned int i = 0; i < strArray.size(); ++i)
 		std::cout << strArray[i] << " ";
 	std::cout << "\n";
@@ -62,11 +69,11 @@ int main()
 	personArray[0] = Person("Alice");
 	personArray[1] = Person("Bob");
 
-	std::cout << "Person array: ";
+	std::cout << "Class Person Array: ";
 	for (unsigned int i = 0; i < personArray.size(); ++i)
 		std::cout << personArray[i].getName() << " ";
 	std::cout << "\n";
-		
+	
 	return 0;
 }
 	
