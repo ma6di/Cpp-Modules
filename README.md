@@ -23,7 +23,7 @@ polymorphism, abstract classes, and exception handling.
 | 07     | Templates                              | Function and class templates, specialization                    |
 | 08     | Templated Containers and Iterators     | Custom stack-like container with iterators                      |
 | 09	    | STL Algorithms and Containers	         | Algorithmic sorting, efficiency (time complexity),              |
-|        |                                        |  RPN, Ford-Johnson algorithm (merge-insertion sort)             
+|                                                    RPN, Ford-Johnson algorithm (merge-insertion sort)             
 
 ---
 
