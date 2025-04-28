@@ -1,20 +1,10 @@
 #include "PmergeMe.hpp"
 
-template<typename T>
-void printContainer(const std::string& label, const T& container)
-{
-    typename T::const_iterator it;
-    std::cout << label;
-    for (it = container.begin(); it != container.end(); ++it)
-        std::cout << *it << " ";
-    std::cout << std::endl;
-}
-
 int main(int argc, char** argv)
 {
     if (argc < 2)
     {
-        std::cerr << "Error" << std::endl;
+        std::cerr << "Error: plz enter arguments" << std::endl;
         return 1;
     }
 
@@ -50,7 +40,7 @@ int main(int argc, char** argv)
     }
     catch (const std::exception& e)
     {
-        std::cerr << "Error" << std::endl;
+        std::cerr << "Error: " << e.what() << std::endl;
         return 1;
     }
 

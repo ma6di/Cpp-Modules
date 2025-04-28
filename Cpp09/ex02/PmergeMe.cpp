@@ -1,8 +1,14 @@
 #include "PmergeMe.hpp"
-
-// Constructor and Destructor
-PmergeMe::PmergeMe() {}
-PmergeMe::~PmergeMe() {}
+PmergeMe::PmergeMe(){};
+PmergeMe::~PmergeMe(){};
+PmergeMe& PmergeMe::operator=(const PmergeMe& other) {
+    if (this == &other) {
+        return *this; 
+    }
+    return *this;
+};
+PmergeMe::PmergeMe(const PmergeMe& other){(void)(other);
+};
 
 void PmergeMe::parseInput(int argc, char** argv, std::vector<int>& vec, std::deque<int>& deq)
 {
@@ -12,11 +18,11 @@ void PmergeMe::parseInput(int argc, char** argv, std::vector<int>& vec, std::deq
         for (size_t j = 0; j < arg.size(); ++j)
         {
             if (!isdigit(arg[j]))
-                throw std::runtime_error("Error");
+                throw std::runtime_error("Non digit element");
         }
         long num = std::stol(arg);
         if (num < 0 || num > INT32_MAX)
-            throw std::runtime_error("Error");
+            throw std::runtime_error("Number bigger than MAX_INT");
         vec.push_back(static_cast<int>(num));
         deq.push_back(static_cast<int>(num));
     }

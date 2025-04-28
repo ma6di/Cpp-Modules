@@ -6,6 +6,8 @@
 
 int RPN::evaluate(const std::string& expression)
 {
+	/*iss is like a "scanner" to read words from the string, one by one (3, 4, +, etc.).
+	token is a small storage for each word.*/
     std::stack<int> numbers;
     std::istringstream iss(expression);
     std::string token;
@@ -19,7 +21,7 @@ int RPN::evaluate(const std::string& expression)
 		{
             if (numbers.size() < 2)
 			{
-                throw std::runtime_error("Error");
+                throw std::runtime_error("Error: Oprator should be after two numbers");
             }
             int b = numbers.top();
 			numbers.pop();
@@ -35,20 +37,20 @@ int RPN::evaluate(const std::string& expression)
             else if (token == "/")
 			{
                 if (b == 0)
-                    throw std::runtime_error("Error");
+                    throw std::runtime_error("Error: Devision by zero is not possible");
                 result = a / b;
             }
             numbers.push(result);
         }
 		else
 		{
-            throw std::runtime_error("Error");
+            throw std::runtime_error("Error: Wrong input");
         }
     }
 
     if (numbers.size() != 1)
 	{
-        throw std::runtime_error("Error");
+        throw std::runtime_error("Error: Wrong input");
     }
 
     return numbers.top();
