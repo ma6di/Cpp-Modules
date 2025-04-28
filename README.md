@@ -22,6 +22,8 @@ polymorphism, abstract classes, and exception handling.
 | 06     | Casts and Conversion                   | `static_cast`, `dynamic_cast`, `reinterpret_cast`, `const_cast` |
 | 07     | Templates                              | Function and class templates, specialization                    |
 | 08     | Templated Containers and Iterators     | Custom stack-like container with iterators                      |
+| 09	    | STL Algorithms and Containers	         | Algorithmic sorting, efficiency (time complexity), RPN,         |
+|        |                                        |  merge-insertion sort                                           |                                                    
 
 ---
 
