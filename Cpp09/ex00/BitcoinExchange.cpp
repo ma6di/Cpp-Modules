@@ -155,7 +155,10 @@ void BitcoinExchange::processInquiryFile() const {
 	}
 
 	std::string line;
-	std::getline(file, line); // Skip header
+	if (!std::getline(file, line)) {
+        std::cerr << "Error: file is empty or contains only a header." << std::endl;
+        return;
+    }
 
 	while (std::getline(file, line)) {
 		size_t pipePos = line.find(" | ");
