@@ -1,11 +1,11 @@
 
 #pragma once
 
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <sstream>
-#include <map>
+# include <iostream>
+# include <fstream>
+# include <string>
+# include <sstream>
+# include <map>
 # include <cstdlib>
 
 //all checks
@@ -21,7 +21,7 @@ class BitcoinExchange
 		void validateExchangeRateDatabase() const;
 
 	public: 
-		BitcoinExchange(const std::string& exchangeRateDatabase, const std::string& inquiryDatabase);
+		BitcoinExchange(const std::string& inquiryDatabase);
 		~BitcoinExchange();
 		BitcoinExchange(const BitcoinExchange& other);
 		BitcoinExchange& operator=(const BitcoinExchange& other);

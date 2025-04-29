@@ -7,7 +7,11 @@
 #include <iostream>
 #include <sstream>
 #include <stdexcept>
-#include <chrono>
+#include <climits>
+#include <map>
+#include <cmath>
+#include <cstdlib>
+#include <algorithm>
 
 class PmergeMe
 {
@@ -20,8 +24,12 @@ public:
     static void parseInput(int argc, char **argv, std::vector<int>& vec, std::deque<int>& deq);
     static void mergeInsertSortVector(std::vector<int>& vec);
     static void mergeInsertSortDeque(std::deque<int>& deq);
+	int getVectorComparisons() const;
+	int getDequeComparisons() const;
 
 private:
+	static int _vectorComparisons;
+	static int _dequeComparisons;
     static void insertVector(std::vector<int>& vec, int element);
     static void insertDeque(std::deque<int>& deq, int element);
 };
@@ -36,6 +44,7 @@ void printContainer(const std::string& label, const T& container)
     std::cout << std::endl;
 }
 
+void printOptimalComparisonTable(int actualComparisons, int n);
 #endif
 
 

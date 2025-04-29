@@ -13,19 +13,19 @@ int main(int argc, char** argv)
         std::vector<int> vec;
         std::deque<int> deq;
 
-        PmergeMe::parseInput(argc, argv, vec, deq);
+		PmergeMe sorter;
+        sorter.parseInput(argc, argv, vec, deq);
 
         printContainer("Before: ", vec);
 
-        typedef std::clock_t clock_type;
 
-        clock_type start_vec = std::clock();
-        PmergeMe::mergeInsertSortVector(vec);
-        clock_type end_vec = std::clock();
+        clock_t start_vec = clock();
+        sorter.mergeInsertSortVector(vec);
+        clock_t end_vec = clock();
 
-        clock_type start_deq = std::clock();
-        PmergeMe::mergeInsertSortDeque(deq);
-        clock_type end_deq = std::clock();
+        clock_t start_deq = clock();
+        sorter.mergeInsertSortDeque(deq);
+        clock_t end_deq = clock();
 
         printContainer("After: ", vec);
 
@@ -37,6 +37,10 @@ int main(int argc, char** argv)
 
         std::cout << "Time to process a range of " << deq.size() << " elements with std::deque : " 
                   << time_deq << " us" << std::endl;
+		std::cout << "Vector comparisons: " << sorter.getVectorComparisons() << std::endl;
+		std::cout << "Deque comparisons: " << sorter.getDequeComparisons() << std::endl;
+
+		printOptimalComparisonTable(sorter.getVectorComparisons(), argc - 1);
     }
     catch (const std::exception& e)
     {

@@ -1,8 +1,8 @@
 
 #include "BitcoinExchange.hpp"
 
-BitcoinExchange::BitcoinExchange(const std::string& exchangeRateDatabase, const std::string& inquiryDatabase)
-    : _exchangeRateDatabase(exchangeRateDatabase), _inquiryDatabase(inquiryDatabase)
+BitcoinExchange::BitcoinExchange(const std::string& inquiryDatabase)
+    : _exchangeRateDatabase("data.csv") ,_inquiryDatabase(inquiryDatabase)
 {
     validateExchangeRateDatabase();
     processExchangeRateDatabase();

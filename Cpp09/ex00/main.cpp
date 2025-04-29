@@ -4,15 +4,15 @@
 int main(int argc, char** argv)
 {
 
-	if (argc != 3)
+	if (argc != 2)
 	{
-		std::cerr << "Usage: " << argv[0] << " <Exchange_rate Database File> <Inquiry File>" << std::endl;
+		std::cerr << "Usage: " << argv[0] << "<Inquiry File>" << std::endl;
 		return 1;
 	}
 
 	try 
 	{
-		BitcoinExchange bitcoinExchange(argv[1], argv[2]);
+		BitcoinExchange bitcoinExchange(argv[1]);
     } 
 	catch (const std::exception& e)
 	{
