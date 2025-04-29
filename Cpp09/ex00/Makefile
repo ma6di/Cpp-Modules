@@ -7,12 +7,13 @@ NAME = btc
 
 # Source files
 SRCS = main.cpp BitcoinExchange.cpp
+INC = BitcoinExchange.hpp
 OBJS = $(SRCS:.cpp=.o)
 
 # Build the executable
 all: $(NAME)
 
-$(NAME): $(OBJS)
+$(NAME): $(OBJS) $(INC)
 	$(CXX) $(CXXFLAGS) -o $(NAME) $(OBJS)
 
 # Clean object files

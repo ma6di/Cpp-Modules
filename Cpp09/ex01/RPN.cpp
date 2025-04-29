@@ -3,30 +3,49 @@
 #include <sstream>
 #include <iostream>
 #include <cstdlib>
+#include <iostream>
 
-int RPN::evaluate(const std::string& expression)
+
+RPN::RPN(const std::string& expression) : _expression(expression)
+{
+	evaluate();
+}
+
+RPN::~RPN(){};
+
+RPN::RPN(const RPN& other)
+	: _stack(other._stack), _expression(other._expression) {}
+
+RPN& RPN::operator=(const RPN& other) {
+	if (this != &other) {
+		_stack = other._stack;
+		_expression = other._expression;
+	}
+	return *this;
+}
+
+int RPN::evaluate()
 {
 	/*iss is like a "scanner" to read words from the string, one by one (3, 4, +, etc.).
 	token is a small storage for each word.*/
-    std::stack<int> numbers;
-    std::istringstream iss(expression);
+    std::istringstream iss(_expression);
     std::string token;
 
     while (iss >> token)
 	{
         if (token.length() == 1 && isdigit(token[0])) {
-            numbers.push(token[0] - '0'); // Convert char to int
+            _stack.push(token[0] - '0'); // Convert char to int
         }
 		else if (token == "+" || token == "-" || token == "*" || token == "/")
 		{
-            if (numbers.size() < 2)
+            if (_stack.size() < 2)
 			{
                 throw std::runtime_error("Error: Oprator should be after two numbers");
             }
-            int b = numbers.top();
-			numbers.pop();
-            int a = numbers.top();
-			numbers.pop();
+            int b = _stack.top();
+			_stack.pop();
+            int a = _stack.top();
+			_stack.pop();
             int result = 0;
             if (token == "+")
                 result = a + b;
@@ -40,7 +59,7 @@ int RPN::evaluate(const std::string& expression)
                     throw std::runtime_error("Error: Devision by zero is not possible");
                 result = a / b;
             }
-            numbers.push(result);
+            _stack.push(result);
         }
 		else
 		{
@@ -48,10 +67,15 @@ int RPN::evaluate(const std::string& expression)
         }
     }
 
-    if (numbers.size() != 1)
+    if (_stack.size() != 1)
 	{
         throw std::runtime_error("Error: Wrong input");
     }
 
-    return numbers.top();
+    return _stack.top();
+}
+
+int RPN::getResult()
+{
+	return _stack.top();
 }

@@ -1,24 +1,48 @@
 
 #include "BitcoinExchange.hpp"
 
-void ValidateSouceFileFormat(const std::string& filename) {
-	size_t pos = filename.find(".csv");
-	if (pos == std::string::npos || pos + 4 != filename.length()) {
+BitcoinExchange::BitcoinExchange(const std::string& exchangeRateDatabase, const std::string& inquiryDatabase)
+    : _exchangeRateDatabase(exchangeRateDatabase), _inquiryDatabase(inquiryDatabase)
+{
+    validateExchangeRateDatabase();
+    processExchangeRateDatabase();
+    processInquiryFile();
+}
+
+BitcoinExchange::~BitcoinExchange() {}
+
+BitcoinExchange::BitcoinExchange(const BitcoinExchange& other) :
+    _exchangeRateDatabase(other._exchangeRateDatabase),
+    _inquiryDatabase(other._inquiryDatabase),
+    _sourceDataMap(other._sourceDataMap) {}
+
+// Copy assignment operator
+BitcoinExchange& BitcoinExchange::operator=(const BitcoinExchange& other) {
+    if (this != &other) {
+        _exchangeRateDatabase = other._exchangeRateDatabase;
+        _inquiryDatabase = other._inquiryDatabase;
+        _sourceDataMap = other._sourceDataMap;
+    }
+    return *this;
+}
+
+void BitcoinExchange::validateExchangeRateDatabase() const {
+	size_t pos = _exchangeRateDatabase.find(".csv");
+	if (pos == std::string::npos || pos + 4 != _exchangeRateDatabase.length()) {
 		throw std::invalid_argument("Error: Wrong file format. Expected a .csv file.");
 	}
 }
 
-void processSourceDataBaseFile(const std::string& filename, std::map<std::string, float>& sourceDataMap)
-{
-	std::ifstream inputFile(filename.c_str());
-	if (!inputFile.is_open()) {
+void BitcoinExchange::processExchangeRateDatabase() {
+	std::ifstream inquiryFile(_exchangeRateDatabase.c_str());
+	if (!inquiryFile.is_open()) {
 		throw std::ios_base::failure("Error: Could not open input file.");
 	}
 
 	std::string line;
-	std::getline(inputFile, line); // skip the header line
+	std::getline(inquiryFile, line); // skip the header line
 
-	while (std::getline(inputFile, line)) {
+	while (std::getline(inquiryFile, line)) {
 		std::istringstream ss(line);
 		std::string date, rateStr;
 
@@ -26,8 +50,8 @@ void processSourceDataBaseFile(const std::string& filename, std::map<std::string
 		{
 			try
 			{
-				float rate = std::stof(rateStr);
-				sourceDataMap[date] = rate;
+				float rate = std::atof(rateStr.c_str());
+				_sourceDataMap[date] = rate;
 			}
 			catch (std::exception& e)
 			{
@@ -39,36 +63,81 @@ void processSourceDataBaseFile(const std::string& filename, std::map<std::string
 			std::cerr << "Warning: Malformed line: " << line << "\n";
 		}
 	}
-	inputFile.close();
+	inquiryFile.close();
 }
 
-bool isValidDate(const std::string& date) {
-	if (date.length() != 10 || date[4] != '-' || date[7] != '-')
-		return false;
+bool isLeapYear(int year)
+{
+    return ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0);
+}
 
+int getDaysInMonth(int month, int year)
+{
+    static const int daysInMonth[] = { 31, 28, 31, 30, 31, 30,
+                                       31, 31, 30, 31, 30, 31 };
+
+    if (month == 2 && isLeapYear(year))
+        return 29;
+
+    if (month < 1 || month > 12)
+        return -1; // invalid month
+
+    return daysInMonth[month - 1];
+}
+
+bool isValidDate(const std::string& inquiryDate) {
+	if (inquiryDate.length() != 10 || inquiryDate[4] != '-' || inquiryDate[7] != '-')
+		return false;
 	int year, month, day;
 	try {
-		year = std::stoi(date.substr(0, 4));
-		month = std::stoi(date.substr(5, 2));
-		day = std::stoi(date.substr(8, 2));
+		std::string yearStr = inquiryDate.substr(0, 4);
+		year = std::atoi(yearStr.c_str());
+		std::string monthStr = inquiryDate.substr(5, 2);
+		month = std::atoi(monthStr.c_str());
+		std::string dayStr = inquiryDate.substr(8, 2);
+		day = std::atoi(dayStr.c_str());
 	} catch (...) {
 		return false;
 	}
 
 	if (year < 1 || year > 9999 || month < 1 || month > 12 || day < 1 || day > 31)
 		return false;
-
-	return true;
+	int maxDay = getDaysInMonth(month, year);
+	return day <= maxDay;
 }
 
 bool isValidValue(const std::string& valueStr, float& value) {
 	try {
-		value = std::stof(valueStr);
+		bool dotSeen = false;
+		size_t i = 0;
+
+		// Allow optional + or - at the beginning
+		if (valueStr[i] == '-')
+			throw std::out_of_range("Error: not a positive number.");
+		if (valueStr[i] == '+')
+			i++;
+		for (; i < valueStr.size(); i++)
+		{
+			if (valueStr[i] == '.')
+			{
+				if (dotSeen)
+					throw std::out_of_range("Error: multiple decimal points.");
+				dotSeen = true;
+			}
+			else if (!isdigit(valueStr[i]))
+			{
+				throw std::out_of_range("Error: requested value is not a number.");
+			}
+		}
+
+		value = std::atof(valueStr.c_str());
+
 		if (value < 0)
 			throw std::out_of_range("Error: not a positive number.");
 		if (value > 1000)
 			throw std::out_of_range("Error: too large a number.");
 		return true;
+
 	} catch (const std::out_of_range& e) {
 		std::cerr << e.what() << std::endl;
 	} catch (...) {
@@ -77,8 +146,9 @@ bool isValidValue(const std::string& valueStr, float& value) {
 	return false;
 }
 
-void processResultFile(const std::string& filename, const std::map<std::string, float>& exchangeRates) {
-	std::ifstream file(filename);
+
+void BitcoinExchange::processInquiryFile() const {
+	std::ifstream file(_inquiryDatabase.c_str());
 	if (!file.is_open()) {
 		std::cerr << "Error: could not open file." << std::endl;
 		return;
@@ -108,14 +178,14 @@ void processResultFile(const std::string& filename, const std::map<std::string, 
 		}
 
 		// Use date to find closest match in exchangeRates
-		std::map<std::string, float>::const_iterator it = exchangeRates.lower_bound(date);
-		if (it != exchangeRates.end() && it->first != date) {
-			if (it == exchangeRates.begin()) {
+		std::map<std::string, float>::const_iterator it = _sourceDataMap.lower_bound(date);
+		if (it != _sourceDataMap.end() && it->first != date) {
+			if (it == _sourceDataMap.begin()) {
 				std::cerr << "Error: no earlier date available." << std::endl;
 				continue;
 			}
 			--it;
-		} else if (it == exchangeRates.end()) {
+		} else if (it == _sourceDataMap.end()) {
 			--it;
 		}
 

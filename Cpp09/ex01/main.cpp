@@ -11,8 +11,8 @@ int main(int argc, char* argv[]) {
 
     try
 	{
-        int result = RPN::evaluate(argv[1]);
-        std::cout << result << std::endl;
+        RPN rpn(argv[1]);
+        std::cout << rpn.getResult() << std::endl;
     } catch (const std::exception& e)
 	{
         std::cerr << e.what() << std::endl;
