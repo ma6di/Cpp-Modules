@@ -1,25 +1,7 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   PairKeeper.hpp                                     :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mhuszar <mhuszar@student.42vienna.com>     +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/16 11:35:34 by mhuszar           #+#    #+#             */
-/*   Updated: 2024/09/21 18:09:06 by mhuszar          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-#ifndef PAIRKEEPER_HPP
-# define PAIRKEEPER_HPP
+#pragma once
 
 #include <deque>
-
 #define DUMMY_VAL 2147483650
-
-#ifndef DEBUG_MODE
-# define DEBUG_MODE 0
-#endif
 
 class PairKeeper
 {
@@ -44,4 +26,3 @@ class PairKeeper
         int dummy_max;
 };
 
-#endif

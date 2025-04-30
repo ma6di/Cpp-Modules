@@ -1,59 +1,24 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   PmergeMe.tpp                                       :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mcheragh <mcheragh@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/30 20:52:31 by mhuszar           #+#    #+#             */
-/*   Updated: 2025/04/30 15:01:44 by mcheragh         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 template <class Container>
-PmergeMe<Container>::PmergeMe(int argc, char **argv, bool print)
-{
+PmergeMe<Container>::PmergeMe(int argc, char **argv) {
     sequence.resize(argc);
-    
     do_sort(argc, argv);
-
-    if (print)
-    {
-        std::cout << "After:  ";
-        cont_chain.print_content(0);
-        if (COUNT)
-            std::cout << std::endl << "Number of comparisons: " << comp << std::endl;
-    }
 }
 
 template <class Container>
-PmergeMe<Container>::~PmergeMe(void)
-{
-    
-}
+PmergeMe<Container>::~PmergeMe(void) {}
 
 template <class Container>
-void PmergeMe<Container>::do_sort(int argc, char **argv)
-{
+void PmergeMe<Container>::do_sort(int argc, char **argv) {
     calculate_depth(argc);
-    cont_chain.init_list_head(argc, argv);
-    bottom = (recursion_levels * 2 * (-1));
+    cont_chain = MyList<Container>(argc, argv);  // direct construction
+    bottom = recursion_levels * (-2);
     breakpoint = recursion_levels * (-1);
-    // std::cout << "Before:  ";
-    // cont_chain.print_content(0);
     assemble();
 }
 
 template <class Container>
-void PmergeMe<Container>::intake_sequence(int argc, char **seq)
-{
-    sequence.resize(argc);
-    cont_chain = MyList<Container>(argc, seq);
-}
-
-template <class Container>
-int PmergeMe<Container>::calculate_depth(int argc)
-{
+int PmergeMe<Container>::calculate_depth(int argc) {
     recursion_levels = 0;
     argc--;
     while (argc > 1)
@@ -115,8 +80,8 @@ void PmergeMe<Container>::create_sequence(Container& cont, Container& pair)
     sequence.resize(max_idx + 1);
     while (idx < max_idx)
     {
-        if (COUNT)
-            comp++;
+        
+        comp++;
         if (cont[idx] < cont[idx + 1])
         {
             pair[ctr] = cont[idx];
@@ -191,9 +156,6 @@ void PmergeMe<Container>::take_apart()
     if (depth > bottom)
         take_apart();
 
-    if (DEBUG_MODE)
-        std::cout << "\033[31mDepth " << depth << ". Taking apart...\033[0m" << std::endl;
-
     cont_chain.setup_next_depth();
     reassess_size(); //needed for calc of my_pair
 
@@ -208,11 +170,7 @@ void PmergeMe<Container>::take_apart()
     if (my_num == 1) //no "follow" happened
         sequence.clear();
     depth++;
-    if(DEBUG_MODE)
-    {
-        cont_chain.display_list();
-        std::cout << std::endl;
-    }
+
     return ;
 }
 
@@ -267,7 +225,7 @@ void PmergeMe<Container>::merge_containers(Container& from, Container& to)
     while (first <= last)
     {
         mid = first + ((last - first) / 2);
-        if (COUNT && mid != pair)
+        if (mid != pair)
             comp++;
         if (*mid == *target)
         {
@@ -344,9 +302,6 @@ void PmergeMe<Container>::assemble()
     else if (depth <= breakpoint)
         take_apart();
 
-    if (DEBUG_MODE)
-        std::cerr << "\033[31mDepth " << depth << ". Assembling...\033[0m" << std::endl;
-
     int diff = depth - breakpoint;
     merge_containers(cont_chain[my_pair_up(0, diff)], cont_chain[0]);
     int my_num = 1;
@@ -360,48 +315,10 @@ void PmergeMe<Container>::assemble()
     cont_chain.eliminate_empty_nodes();
     reassess_size();
     
-    if(DEBUG_MODE)
-    {
-        cont_chain.display_list();
-        std::cout << std::endl;
-    }
     return ;
 }
 
-template <class Container>
-void PmergeMe<Container>::print_content(Container& cont)
-{
-    typename Container::iterator cur = cont.begin();
-    while (cur != cont.end())
-    {
-        std::cout << *cur << " ";
-        if (*cur < 10)
-            std::cout << " ";
-        cur++;
-    }
-    std::cout << std::endl;
+template <typename Container>
+void PmergeMe<Container>::print_content() {
+    cont_chain.print_content(0); // or your preferred index
 }
-
-//would need argc protection for this limit if this function was in use
-// template <class Container>
-// void PmergeMe<Container>::fill_Jakob()
-// {
-//     int idx = 1;
-//     int nextJakob = 1;
-//     int prevJakob = 1;
-//     int elem = 2;
-//     infiniteJakob.resize(10000);
-//     infiniteJakob[0] = 1;
-//     while (idx < 100)
-//     {
-//         if (nextJakob <= prevJakob)
-//         {
-//             prevJakob = (pow(2, (elem - 1) + 1) + pow(-1, (elem - 1))) / 3;
-//             nextJakob = (pow(2, elem + 1) + pow(-1, elem)) / 3;
-//             elem++;
-//         }
-//         infiniteJakob[idx] = nextJakob;
-//         nextJakob--;
-//         idx++;
-//     }
-// }

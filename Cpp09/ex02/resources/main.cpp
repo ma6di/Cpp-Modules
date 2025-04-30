@@ -1,10 +1,5 @@
 
 #include "PmergeMe.hpp"
-#include <deque>
-#include <ctime> 
-#include <vector>
-#include "MyList.hpp"
-#include <sys/time.h>
 
 void display_time(clock_t start, clock_t end)
 {
@@ -47,21 +42,24 @@ int main(int argc, char **argv)
 		{
 
 			std::cout << "After:  " << argv[1] << std::endl;
-			if (COUNT)
-				std::cout << std::endl << "Number of comparisons: 0" << std::endl;
+			
+			std::cout << std::endl << "Number of comparisons: 0" << std::endl;
 			return 0;
 		}
         t1 = std::clock();
-        PmergeMe< std::deque<long int> > deq(argc, argv, true);
+        PmergeMe< std::deque<long int> > deq(argc, argv);
         t2 = std::clock();
+		std::cout << "After:  ";
+        deq.print_content();
         std::cout << "Time (deque): ";
         display_time(t1, t2);
-
+		
         t1 = std::clock();
-        PmergeMe< std::vector<long int> > vec(argc, argv, false);
+        PmergeMe< std::vector<long int> > vec(argc, argv);
         t2 = std::clock();
         std::cout << "Time (vector): ";
         display_time(t1, t2);
+		std::cout << std::endl << "Number of comparisons: " << deq.comp << std::endl;
     }
     catch (const std::exception& e) {
         if (g_errorPrimed) {

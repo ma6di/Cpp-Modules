@@ -1,20 +1,6 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   MyList.hpp                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mcheragh <mcheragh@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/05 19:28:09 by mhuszar           #+#    #+#             */
-/*   Updated: 2025/04/30 14:56:19 by mcheragh         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-#ifndef MYLIST_HPP
-# define MYLIST_HPP
+#pragma once
 
 #include <iostream>
-
 
 template <class Container>
 struct Node
@@ -28,35 +14,29 @@ struct Node
 template <class Container>
 class MyList
 {
-    public:
-        
-        MyList(void);
-        MyList(int argc, char **argv);
-        ~MyList(void);
+public:
+    MyList();                                   // Default constructor
+    MyList(int argc, char **argv);              // Init with input
+    MyList(const MyList& other);                // Copy constructor
+    MyList& operator=(const MyList& other);     // Copy assignment
+    ~MyList();                                  // Destructor
 
-        Container&  operator[](int index);
-        void        init_list_head(int argc, char **argv);
-        void        setup_next_depth();
-        void        eliminate_empty_nodes();
-        int         size();
-        void        display_list();
-        void        print_content(int index);
+    Container& operator[](int index);           // Access container at index
 
-        
-    private:
+    void setup_next_depth();                    // Create new depth nodes
+    void eliminate_empty_nodes();               // Prune empty nodes
+    int  size();                                // List size
+    void print_content(int index);            
 
-        MyList(const MyList& other);
-        MyList& operator=(const MyList& other);
+private:
+    void init_from_args(int argc, char **argv); // Shared initializer
+    void attach_new_node(int cont_size);        // Internal: grow list
+    int  get_smallest_cont_size();              // Internal: for recursion
+    void clear();                               // Utility for reuse/reset
 
-        void    attach_new_node(int cont_size);
-        int     get_smallest_cont_size();
-        void    delete_internal_list();
-
-        int             old_size;
-        int             internal_list_size;
-        Node<Container> *internal_list_head;
+    int             old_size;
+    int             internal_list_size;
+    Node<Container>* internal_list_head;
 };
 
 #include "MyList.tpp"
-
-#endif

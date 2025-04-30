@@ -1,31 +1,12 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   PairKeeper.cpp                                     :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mcheragh <mcheragh@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/16 11:35:36 by mhuszar           #+#    #+#             */
-/*   Updated: 2025/04/30 13:29:10 by mcheragh         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "PairKeeper.hpp"
 #include "PmergeMe.hpp"
 
 bool g_errorPrimed = false;
 
-PairKeeper::PairKeeper(void)
-{
-    
-}
-PairKeeper::~PairKeeper(void)
-{
-    
-}
+PairKeeper::PairKeeper(void) {}
+PairKeeper::~PairKeeper(void) {}
 
-void    PairKeeper::initialize(int size)
-{
+void    PairKeeper::initialize(int size) {
     int pos = 0;
     
     indexes.clear();
@@ -40,8 +21,7 @@ void    PairKeeper::initialize(int size)
     max = dummy_max = size - 1;
 }
 
-int PairKeeper::pairIndex(int idx)
-{
+int PairKeeper::pairIndex(int idx) {
     if (idx > max || idx < 0 || idx >= static_cast<int>(indexes.size()))
 	{
 		g_errorPrimed = true;
@@ -50,19 +30,11 @@ int PairKeeper::pairIndex(int idx)
     return indexes[idx];
 }
 
-void    PairKeeper::adjustPositions(int inserted_at)
-{
+void    PairKeeper::adjustPositions(int inserted_at) {
     int actual_idx = 0;
     int iternums = 0;
     if (inserted_at > dummy_max)
-    {
-        if (DEBUG_MODE)
-        {
-            std::cerr << "wanted idx: " << inserted_at << " but max is: " << dummy_max;
-            std::cerr << ". Returning from lookup... " << std::endl;
-        }
         return ;
-    }
     else
         dummy_max++;
     std::deque<long int>::iterator iter = dummy_cont.begin();
@@ -89,8 +61,7 @@ void    PairKeeper::adjustPositions(int inserted_at)
     }
 }
 
-void PairKeeper::print_content(char flag)
-{
+void PairKeeper::print_content(char flag) {
     std::deque<long int>::iterator cur; 
     if (flag == 'D')
     {

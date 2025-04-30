@@ -1,41 +1,24 @@
 NAME = PmergeMe
-CXX1 = clang++
-CXX2 = g++
-CXX = c++
-CXXFLAGS = -Wall -Werror -Wextra -Wshadow -std=c++98 #-g
-#HEADER =
+C++ = c++
+C++_FLAGS = -Wall -Werror -Wextra -Wshadow -std=c++98
 
 #Colors
-DEF_COLOR = \033[0;39m
-GRAY = \033[0;90m
-RED = \033[0;91m
+RESET = \033[0;39m
 GREEN = \033[0;92m
-YELLOW = \033[0;93m
-BLUE = \033[0;94m
-MAGENTA = \033[0;95m
-CYAN = \033[0;96m
-WHITE = \033[0;97m
 
-SRC_FILES = main PairKeeper
-
-SRC = $(addsuffix .cpp, $(SRC_FILES))
+SRC = main.cpp PairKeeper.cpp
+HEADER = MyList.hpp PairKeeper.hpp PmergeMe.hpp
 
 OBJ = $(SRC:.cpp=.o)
 
 all: $(NAME)
 
 %.o : %.cpp $(HEADER)
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+	$(C++) $(C++_FLAGS) -c $< -o $@
 
 $(NAME): $(OBJ) $(HEADER)
-	$(CXX) $(CXXFLAGS) $(OBJ) -g -o $(NAME)
-	@echo "$(GREEN)Executable $(NAME) created!$(DEF_COLOR)"
-
-debug: fclean
-	@$(MAKE) all CXXFLAGS="$(CXXFLAGS) -DDEBUG_MODE=1 -DCOUNT=1 -g"
-
-count: fclean
-	@$(MAKE) all CXXFLAGS="$(CXXFLAGS) -DCOUNT=1"
+	$(C++) $(C++_FLAGS) $(OBJ) -g -o $(NAME)
+	@echo "$(GREEN)Executable $(NAME) created!$(RESET)"
 
 clean:
 	rm -f $(OBJ)
@@ -45,18 +28,4 @@ fclean: clean
 
 re: fclean all
 
-asif: re
-	make fclean
-
-strict:
-	@echo "$(GREEN)Compiling with $(YELLOW)$(CXX1)$(GREEN)...$(DEF_COLOR)"
-	@$(MAKE) all CXX=$(CXX1)
-	@echo "$(GREEN)Cleaning up...$(DEF_COLOR)"
-	@$(MAKE) fclean
-	@echo "$(GREEN)Compiling with $(YELLOW)$(CXX2)$(GREEN)...$(DEF_COLOR)"
-	@$(MAKE) all CXX=$(CXX2)
-	@echo "$(GREEN)Cleaning up again...$(DEF_COLOR)"
-	@$(MAKE) clean
-	@echo "$(GREEN)Tested for both compilers.$(DEF_COLOR)"
-
-.PHONY: all clean fclean re asif strict debug count
+.PHONY: all clean fclean re

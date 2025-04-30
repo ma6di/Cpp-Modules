@@ -1,8 +1,4 @@
 
-#ifndef COUNT
-# define COUNT 0
-#endif
-
 template <class Container>
 MyList<Container>::MyList()
 {
@@ -11,71 +7,58 @@ MyList<Container>::MyList()
 }
 
 template <class Container>
+MyList<Container>::MyList(int argc, char **argv) {
+    internal_list_head = new Node<Container>;
+    internal_list_head->cont.resize(argc - 1);
+    internal_list_head->prev = NULL;
+    internal_list_head->next = NULL;
+    internal_list_head->idx = 0;
+
+    for (int i = 0; i < argc - 1; ++i)
+        internal_list_head->cont[i] = std::atoi(argv[i + 1]);
+
+    internal_list_size = 1;
+}
+
+template <class Container>
 MyList<Container>::~MyList()
 {
-    delete_internal_list();
+    clear();
 }
 
-/*Converts command-line arguments into integers and stores them in 
-the cont field of the first node.
-This is the initial "unsorted input" for the sorting algorithm.*/
 template <class Container>
-MyList<Container>::MyList(int argc, char **argv)
-{
+MyList<Container>& MyList<Container>::operator=(const MyList<Container>& other) {
+    if (this != &other) {
+        clear();
+        if (!other.internal_list_head) {
+            internal_list_head = NULL;
+            internal_list_size = 0;
+            return *this;
+        }
+        internal_list_head = new Node<Container>(*other.internal_list_head);
+        internal_list_head->prev = NULL;
+        internal_list_head->next = NULL;
+        internal_list_head->idx = 0;
+        internal_list_size = 1;
+        // If you later support multiple nodes, copy them here
+    }
+    return *this;
+}
+
+template <class Container>
+void MyList<Container>::clear() {
+    Node<Container>* current = internal_list_head;
+    while (current) {
+        Node<Container>* next = current->next;
+        delete current;
+        current = next;
+    }
     internal_list_head = NULL;
-    internal_list_head = new Node<Container>;
-    internal_list_head->cont.resize(argc - 1);
-    internal_list_head->prev = NULL;
-    internal_list_head->next = NULL;
-    internal_list_head->idx = 0;
-    int cur_pos = 0;
-    while (cur_pos <= argc - 2)
-    {
-        internal_list_head->cont[cur_pos] = std::atoi(argv[cur_pos + 1]);
-        cur_pos++;
-    }
-    internal_list_size = 1;
-}
-
-/*Similar to the constructor above, but adds:
-Optional printing of the single element.
-Error handling if input has only one number (since Ford-Johnson requires at least one pair).*/
-template <class Container>
-void MyList<Container>::init_list_head(int argc, char **argv)
-{
-    internal_list_head = NULL;
-    internal_list_head = new Node<Container>;
-    internal_list_head->cont.resize(argc - 1);
-    internal_list_head->prev = NULL;
-    internal_list_head->next = NULL;
-    internal_list_head->idx = 0;
-    int cur_pos = 0;
-    while (cur_pos <= argc - 2)
-    {
-        internal_list_head->cont[cur_pos] = std::atoi(argv[cur_pos + 1]);
-        cur_pos++;
-    }
-    internal_list_size = 1;
+    internal_list_size = 0;
 }
 
 template <class Container>
-void MyList<Container>::delete_internal_list()
-{
-    if (internal_list_head == NULL)
-        return ;
-    Node<Container> *cur = internal_list_head;
-    Node<Container> *prev;
-    while (cur)
-    {
-        prev = cur;
-        cur = cur->next;
-        delete prev;
-    }
-}
-
-template <class Container>
-Container& MyList<Container>::operator[](int index)
-{
+Container& MyList<Container>::operator[](int index) {
     Node<Container> *cur = internal_list_head;
     if (!cur)
         throw std::out_of_range("Accessing element in an empty list");
@@ -91,10 +74,8 @@ Container& MyList<Container>::operator[](int index)
     return cur->cont;
 }
 
-
 template <class Container>
-void MyList<Container>::setup_next_depth()
-{
+void MyList<Container>::setup_next_depth() {
     int sm_size = get_smallest_cont_size();
     int next_cont_size = (sm_size / 2);
     old_size = internal_list_size;
@@ -105,8 +86,7 @@ void MyList<Container>::setup_next_depth()
 }
 
 template <class Container>
-void MyList<Container>::eliminate_empty_nodes()
-{
+void MyList<Container>::eliminate_empty_nodes() {
     Node<Container> *cur = internal_list_head;
     Node<Container> *empty;
     Node<Container> *before;
@@ -139,33 +119,7 @@ void MyList<Container>::eliminate_empty_nodes()
     size(); //updates list size and indexes
 }
 
-template <class Container>
-void MyList<Container>::display_list()
-{
-    std::cout << std::endl;
-    std::cout << ">>>> DISPLAYING MyList CONTENT <<<<" << std::endl;
-    std::cout << "List size is currently " << size() << " node" << std::endl;
 
-    Node<Container> *cur = internal_list_head;
-    std::cout << std::endl;
-
-    while (cur)
-    {
-        std::cout << "Index " << cur->idx << " holds a container of ";
-        std::cout << cur->cont.size() << " capacity" << std::endl;
-        std::cout << "The content is ";
-
-        typename Container::iterator iter = cur->cont.begin();
-        while (iter != cur->cont.end())
-        {
-            std::cout << *iter << " ";
-            iter++;
-        }
-        std::cout << std::endl;
-    
-        cur = cur->next;
-    }
-}
 
 template <class Container>
 void MyList<Container>::attach_new_node(int cont_size)
