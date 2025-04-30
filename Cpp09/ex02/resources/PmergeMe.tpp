@@ -6,7 +6,7 @@
 /*   By: mcheragh <mcheragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/30 20:52:31 by mhuszar           #+#    #+#             */
-/*   Updated: 2025/04/30 12:58:38 by mcheragh         ###   ########.fr       */
+/*   Updated: 2025/04/30 15:01:44 by mcheragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@ PmergeMe<Container>::PmergeMe(int argc, char **argv, bool print)
 {
     sequence.resize(argc);
     
-    do_sort(argc, argv, print);
+    do_sort(argc, argv);
 
     if (print)
     {
@@ -33,10 +33,10 @@ PmergeMe<Container>::~PmergeMe(void)
 }
 
 template <class Container>
-void PmergeMe<Container>::do_sort(int argc, char **argv, bool print)
+void PmergeMe<Container>::do_sort(int argc, char **argv)
 {
     calculate_depth(argc);
-    cont_chain.init_list_head(argc, argv, print);
+    cont_chain.init_list_head(argc, argv);
     bottom = (recursion_levels * 2 * (-1));
     breakpoint = recursion_levels * (-1);
     // std::cout << "Before:  ";

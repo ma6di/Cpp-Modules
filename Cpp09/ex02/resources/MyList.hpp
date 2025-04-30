@@ -6,7 +6,7 @@
 /*   By: mcheragh <mcheragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/05 19:28:09 by mhuszar           #+#    #+#             */
-/*   Updated: 2025/04/30 13:58:27 by mcheragh         ###   ########.fr       */
+/*   Updated: 2025/04/30 14:56:19 by mcheragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ class MyList
         ~MyList(void);
 
         Container&  operator[](int index);
-        void        init_list_head(int argc, char **argv, bool print);
+        void        init_list_head(int argc, char **argv);
         void        setup_next_depth();
         void        eliminate_empty_nodes();
         int         size();

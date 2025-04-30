@@ -16,6 +16,9 @@ MyList<Container>::~MyList()
     delete_internal_list();
 }
 
+/*Converts command-line arguments into integers and stores them in 
+the cont field of the first node.
+This is the initial "unsorted input" for the sorting algorithm.*/
 template <class Container>
 MyList<Container>::MyList(int argc, char **argv)
 {
@@ -34,8 +37,11 @@ MyList<Container>::MyList(int argc, char **argv)
     internal_list_size = 1;
 }
 
+/*Similar to the constructor above, but adds:
+Optional printing of the single element.
+Error handling if input has only one number (since Ford-Johnson requires at least one pair).*/
 template <class Container>
-void MyList<Container>::init_list_head(int argc, char **argv, bool print)
+void MyList<Container>::init_list_head(int argc, char **argv)
 {
     internal_list_head = NULL;
     internal_list_head = new Node<Container>;
@@ -50,14 +56,6 @@ void MyList<Container>::init_list_head(int argc, char **argv, bool print)
         cur_pos++;
     }
     internal_list_size = 1;
-    if (argc == 2)
-    {
-        if (print)
-            std::cout << "After:  " << argv[1] << std::endl;
-        if (COUNT && print)
-		    std::cout << std::endl << "Number of comparisons: 0" << std::endl;
-		throw std::invalid_argument("Insufficient number of arguments.");
-    }
 }
 
 template <class Container>

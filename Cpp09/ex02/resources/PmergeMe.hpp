@@ -6,7 +6,7 @@
 /*   By: mcheragh <mcheragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/30 20:54:50 by mhuszar           #+#    #+#             */
-/*   Updated: 2025/04/30 13:26:03 by mcheragh         ###   ########.fr       */
+/*   Updated: 2025/04/30 15:01:49 by mcheragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ class PmergeMe
 
     protected:
 
-        virtual void    do_sort(int argc, char **argv, bool print);
+        virtual void    do_sort(int argc, char **argv);
 
         void            take_apart();
         void            assemble();

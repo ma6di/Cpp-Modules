@@ -39,9 +39,18 @@ int main(int argc, char **argv)
         return 0;
 
     print_argv(argc, argv);
+
     clock_t t1, t2;
 
     try {
+		if (argc == 2)
+		{
+
+			std::cout << "After:  " << argv[1] << std::endl;
+			if (COUNT)
+				std::cout << std::endl << "Number of comparisons: 0" << std::endl;
+			return 0;
+		}
         t1 = std::clock();
         PmergeMe< std::deque<long int> > deq(argc, argv, true);
         t2 = std::clock();
