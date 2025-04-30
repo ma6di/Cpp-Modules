@@ -37,8 +37,8 @@ int main(int argc, char** argv)
 
         std::cout << "Time to process a range of " << deq.size() << " elements with std::deque : " 
                   << time_deq << " us" << std::endl;
-		std::cout << "Vector comparisons: " << sorter.getVectorComparisons() << std::endl;
-		std::cout << "Deque comparisons: " << sorter.getDequeComparisons() << std::endl;
+		// std::cout << "comparison: " << sorter.getVectorComparisons() << std::endl;
+		// std::cout << "Deque comparisons: " << sorter.getDequeComparisons() << std::endl;
 
 		printOptimalComparisonTable(sorter.getVectorComparisons(), argc - 1);
     }

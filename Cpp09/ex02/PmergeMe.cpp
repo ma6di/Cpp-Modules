@@ -3,29 +3,23 @@
 int PmergeMe::_vectorComparisons = 0;
 int PmergeMe::_dequeComparisons = 0;
 
-PmergeMe::PmergeMe(){};
-PmergeMe::~PmergeMe(){};
+PmergeMe::PmergeMe() {}
+PmergeMe::~PmergeMe() {}
 
+PmergeMe::PmergeMe(const PmergeMe& other) {(void)other;}
 PmergeMe& PmergeMe::operator=(const PmergeMe& other) {
-    if (this == &other) {
-        return *this; 
-    }
+    if (this != &other) {}
     return *this;
-};
-PmergeMe::PmergeMe(const PmergeMe& other){(void)(other);
-};
+}
 
-void PmergeMe::parseInput(int argc, char** argv, std::vector<int>& vec, std::deque<int>& deq)
-{
-    for (int i = 1; i < argc; ++i)
-    {
+void PmergeMe::parseInput(int argc, char** argv, std::vector<int>& vec, std::deque<int>& deq) {
+    for (int i = 1; i < argc; ++i) {
         std::string arg(argv[i]);
-        for (size_t j = 0; j < arg.size(); ++j)
-        {
+        for (size_t j = 0; j < arg.size(); ++j) {
             if (!isdigit(arg[j]))
                 throw std::runtime_error("Non digit element");
         }
-		char* end;
+        char* end;
         long num = std::strtol(arg.c_str(), &end, 10);
         if (num < 0 || num > INT_MAX)
             throw std::runtime_error("Number bigger than MAX_INT");
@@ -34,121 +28,140 @@ void PmergeMe::parseInput(int argc, char** argv, std::vector<int>& vec, std::deq
     }
 }
 
-void PmergeMe::insertVector(std::vector<int>& vec, int element)
-{
+void PmergeMe::insertVector(std::vector<int>& vec, int element) {
     int left = 0;
     int right = vec.size();
-    int mid;
-
-    while (left < right)
-    {
-        mid = left + (right - left) / 2;
-        _vectorComparisons++;  // one comparison per iteration
-
+    while (left < right) {
+        int mid = left + (right - left) / 2;
+        ++_vectorComparisons;
         if (vec[mid] < element)
             left = mid + 1;
         else
             right = mid;
     }
-
     vec.insert(vec.begin() + left, element);
 }
 
-void PmergeMe::insertDeque(std::deque<int>& deq, int element)
-{
+void PmergeMe::insertDeque(std::deque<int>& deq, int element) {
     int left = 0;
     int right = deq.size();
-    int mid;
-
-    while (left < right)
-    {
-        mid = left + (right - left) / 2;
-        _dequeComparisons++;  // one comparison per iteration
-
+    while (left < right) {
+        int mid = left + (right - left) / 2;
+        ++_dequeComparisons;
         if (deq[mid] < element)
             left = mid + 1;
         else
             right = mid;
     }
-
     deq.insert(deq.begin() + left, element);
 }
 
-void PmergeMe::mergeInsertSortVector(std::vector<int>& vec)
-{
+std::vector<size_t> generateJacobsthalInsertionOrder(size_t n) {
+    std::vector<size_t> jacob;
+    jacob.push_back(0);
+    jacob.push_back(1);
+    while (jacob.back() < n) {
+        jacob.push_back(jacob[jacob.size() - 1] + 2 * jacob[jacob.size() - 2]);
+    }
+
+    std::vector<size_t> order;
+    for (size_t i = 1; i + 1 < jacob.size(); ++i) {
+        size_t a = jacob[i];
+        size_t b = jacob[i + 1];
+        for (int j = static_cast<int>(b) - 1; j >= static_cast<int>(a) && j >= 0 && static_cast<size_t>(j) < n; --j) {
+            order.push_back(static_cast<size_t>(j));
+        }
+    }
+    if (n > 0 && std::find(order.begin(), order.end(), n - 1) == order.end()) {
+        order.push_back(n - 1);
+    }
+    return order;
+}
+
+void PmergeMe::mergeInsertSortVector(std::vector<int>& vec) {
     if (vec.size() <= 1)
         return;
 
-    std::vector<int> mainChain;
-    std::vector<int> pendingElements;
+    std::vector<std::pair<int, int> > pairs;
+    std::vector<int> pending;
 
-    // Pair elements and sort inside pairs
-    for (size_t i = 0; i + 1 < vec.size(); i += 2)
-    {
-        _vectorComparisons++;  // Count comparison before swap, not after
-        if (vec[i] > vec[i + 1]) {
-            std::swap(vec[i], vec[i + 1]);
-        }
-        mainChain.push_back(vec[i + 1]);
-        pendingElements.push_back(vec[i]);
+    for (size_t i = 0; i + 1 < vec.size(); i += 2) {
+        ++_vectorComparisons;
+        if (vec[i] > vec[i + 1])
+            pairs.push_back(std::make_pair(vec[i + 1], vec[i]));
+        else
+            pairs.push_back(std::make_pair(vec[i], vec[i + 1]));
     }
     if (vec.size() % 2 != 0)
-        pendingElements.push_back(vec.back());
+        pending.push_back(vec.back());
+
+    std::vector<int> mainChain;
+    for (size_t i = 0; i < pairs.size(); ++i)
+        mainChain.push_back(pairs[i].second);
 
     mergeInsertSortVector(mainChain);
 
+    for (size_t i = 0; i < pairs.size(); ++i)
+        pending.push_back(pairs[i].first);
+
+    std::vector<size_t> insertionOrder = generateJacobsthalInsertionOrder(pending.size());
+    for (size_t i = 0; i < insertionOrder.size(); ++i) {
+        if (insertionOrder[i] < pending.size())
+            insertVector(mainChain, pending[insertionOrder[i]]);
+    }
+
     vec = mainChain;
-    for (size_t i = 0; i < pendingElements.size(); ++i)
-        insertVector(vec, pendingElements[i]);
 }
 
-void PmergeMe::mergeInsertSortDeque(std::deque<int>& deq)
-{
+void PmergeMe::mergeInsertSortDeque(std::deque<int>& deq) {
     if (deq.size() <= 1)
         return;
 
-    std::deque<int> mainChain;
-    std::deque<int> pendingElements;
+    std::vector<std::pair<int, int> > pairs;
+    std::deque<int> pending;
 
-    // Pair elements and sort inside pairs
-    for (size_t i = 0; i + 1 < deq.size(); i += 2)
-    {
-        _dequeComparisons++;  // Count comparison before swap, not after
-        if (deq[i] > deq[i + 1]) {
-            std::swap(deq[i], deq[i + 1]);
-        }
-        mainChain.push_back(deq[i + 1]);
-        pendingElements.push_back(deq[i]);
+    for (size_t i = 0; i + 1 < deq.size(); i += 2) {
+        ++_dequeComparisons;
+        if (deq[i] > deq[i + 1])
+            pairs.push_back(std::make_pair(deq[i + 1], deq[i]));
+        else
+            pairs.push_back(std::make_pair(deq[i], deq[i + 1]));
     }
     if (deq.size() % 2 != 0)
-        pendingElements.push_back(deq.back());
+        pending.push_back(deq.back());
+
+    std::deque<int> mainChain;
+    for (size_t i = 0; i < pairs.size(); ++i)
+        mainChain.push_back(pairs[i].second);
 
     mergeInsertSortDeque(mainChain);
 
+    for (size_t i = 0; i < pairs.size(); ++i)
+        pending.push_back(pairs[i].first);
+
+    std::vector<size_t> insertionOrder = generateJacobsthalInsertionOrder(pending.size());
+    for (size_t i = 0; i < insertionOrder.size(); ++i) {
+        if (insertionOrder[i] < pending.size())
+            insertDeque(mainChain, pending[insertionOrder[i]]);
+    }
+
     deq = mainChain;
-    for (size_t i = 0; i < pendingElements.size(); ++i)
-        insertDeque(deq, pendingElements[i]);
 }
 
 int PmergeMe::getVectorComparisons() const {
-	return _vectorComparisons;
+    return _vectorComparisons;
 }
 
 int PmergeMe::getDequeComparisons() const {
-	return _dequeComparisons;
+    return _dequeComparisons;
 }
 
 void printOptimalComparisonTable(int actualComparisons, int n) {
     int totalComparisons = 0;
-
-    // Sum the comparisons for each element
     for (int k = 1; k <= n; ++k) {
-        // Calculate ceil(log2(3k / 4))
-        totalComparisons += std::ceil(log2(3.0 * k / 4.0));
+        totalComparisons += std::ceil(std::log(3.0 * k / 4.0) / std::log(2.0));
     }
-
     std::cout << "Element count: " << n << std::endl;
     std::cout << "Your comparisons: " << actualComparisons << std::endl;
     std::cout << "Optimal comparisons (Ford–Johnson): " << totalComparisons << std::endl;
-
 }
