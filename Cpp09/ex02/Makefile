@@ -1,15 +1,24 @@
 NAME = PmergeMe
+C++ = c++
+C++_FLAGS = -Wall -Werror -Wextra -Wshadow -std=c++98
 
-CXX = c++
-CXXFLAGS = -Wall -Wextra -Werror -std=c++98
+#Colors
+RESET = \033[0;39m
+GREEN = \033[0;92m
 
-SRC = main.cpp PmergeMe.cpp
+SRC = main.cpp InsertionIndexTracker.cpp
+HEADER = ContainerChainManager.hpp InsertionIndexTracker.hpp PmergeMe.hpp
+
 OBJ = $(SRC:.cpp=.o)
 
 all: $(NAME)
 
-$(NAME): $(OBJ)
-	$(CXX) $(CXXFLAGS) -o $(NAME) $(OBJ)
+%.o : %.cpp $(HEADER)
+	$(C++) $(C++_FLAGS) -c $< -o $@
+
+$(NAME): $(OBJ) $(HEADER)
+	$(C++) $(C++_FLAGS) $(OBJ) -g -o $(NAME)
+	@echo "$(GREEN)Executable $(NAME) created!$(RESET)"
 
 clean:
 	rm -f $(OBJ)

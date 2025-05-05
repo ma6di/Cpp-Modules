@@ -1,81 +1,78 @@
-#ifndef PMERGEME_HPP
-#define PMERGEME_HPP
+#pragma once
 
-#include <vector>
-#include <deque>
-#include <string>
 #include <iostream>
-#include <sstream>
-#include <stdexcept>
-#include <climits>
-#include <map>
-#include <cmath>
-#include <cstdlib>
 #include <algorithm>
+#include <cmath>
+#include <deque>
+#include <ctime> 
+#include <vector>
+#include <sys/time.h>
+#include "ContainerChainManager.hpp"
+#include "InsertionIndexTracker.hpp"
 
-class PmergeMe
-{
-public:
-	PmergeMe();
-	~PmergeMe();
-	PmergeMe& operator=(const PmergeMe& other);
-	PmergeMe(const PmergeMe& other);
-	
-    static void parseInput(int argc, char **argv, std::vector<int>& vec, std::deque<int>& deq);
-    static void mergeInsertSortVector(std::vector<int>& vec);
-    static void mergeInsertSortDeque(std::deque<int>& deq);
-	int getVectorComparisons() const;
-	int getDequeComparisons() const;
+#define INVALID_MARKER 2147483650
+#define MIL 1000000
 
-private:
-	static int _vectorComparisons;
-	static int _dequeComparisons;
-    static void insertVector(std::vector<int>& vec, int element);
-    static void insertDeque(std::deque<int>& deq, int element);
-};
-
-template<typename T>
-void printContainer(const std::string& label, const T& container)
-{
-    typename T::const_iterator it;
-    std::cout << label;
-    for (it = container.begin(); it != container.end(); ++it)
-        std::cout << *it << " ";
-    std::cout << std::endl;
-}
-
-void printOptimalComparisonTable(int actualComparisons, int n);
+#ifndef GLOBALS_HPP
+#define GLOBALS_HPP
+extern bool g_errorDetected;
 #endif
 
 
-/*
-Input = [7,3,6,2,9,1,8,5]
+template <class Container>
+class PmergeMe
+{
+public:
+    PmergeMe();                                       // Default constructor
+    PmergeMe(int argc, char **argv);                  // Init + sort
+    PmergeMe(const PmergeMe& other);                  // Copy constructor
+    PmergeMe& operator=(const PmergeMe& other);       // Copy assignment
+    ~PmergeMe();                                      // Destructor
 
-First Pair:
-mainChain = [7,6,9,8]
-pendingElements = [3,2,1,5]
+    void print_content();                             // Output sorted content
 
-	Recursively sort mainChain [7,6,9,8]
-	Pair:
-	mainChain = [7,9]
-	pendingElements = [6,8]
+protected:
+    virtual void performMergeInsertSort(int argc, char **argv);      // Main entry
 
-		Recursively sort mainChain [7,9]
-		Pair:
-		mainChain = [9]
-		pendingElements = [7]
-        
-			Recursively sort mainChain [9] → returns
-			Insert 7 into [9] → [7,9]
+    void splitIntoPairs();                                // Step 1: pairing
+    void mergeSortedPairs();                                  // Step 2: recursion
+    int  calculateRecursionDepth(int argc);                   // Recursion control
 
-    Insert 6 into [7,9] → [6,7,9]
-    Insert 8 into [6,7,9] → [6,7,8,9]
+    int  findPairIndex(int my_num);                         // Pairing index helpers
+    int  findUpperPairIndex(int my_num, int diff);
+    void generateInsertionOrder(Container& cont, Container& pair);   // Fill insertion order
+    void applyInsertionOrder(Container& cont, Container& pair);   // Apply insertion order
 
-Insert pendingElements [3,2,1,5] into [6,7,8,9]
-Insert 3 → [3,6,7,8,9]
-Insert 2 → [2,3,6,7,8,9]
-Insert 1 → [1,2,3,6,7,8,9]
-Insert 5 → [1,2,3,5,6,7,8,9]
-*/
+    void mergeSortedContainers(Container& from, Container& to);    // Merge logic
+    void mergeWithCopyOperation(Container& from, Container& to);          // Copy-based merge
+    void updateContainerMetrics();                                     // Adjust values
+    void removeSentinelMarkers(Container& cont);                   // Clean up garbage
 
-//duplicate
+    typename Container::iterator calculateInsertionBoundary(Container& from, int jacob_index);
+    typename Container::iterator findLastInsertionPoint(Container& cont, int idx);
+
+    // Sort control
+    int maxRecursionDepth;
+    int depth;
+    int minRecursionLevel;
+    int recursionBreakpoint;
+
+    // Meta
+    int previousContainerCount;
+    int currentContainerCount;
+    int maxSequenceLength;
+    int originalSize;
+
+    // State
+    typename Container::iterator lastInsertionBoundary;
+    Container sequence;
+    Container jacobsthalSequence;
+    ContainerChainManager<Container> containerChain;
+    InsertionIndexTracker lookup;
+    std::deque<std::pair<int, int> > insertionHistory;
+
+public:
+    int comparisonCount;  // Comparison count (for benchmarking)
+};
+
+#include "PmergeMe.tpp"

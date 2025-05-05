@@ -1,52 +1,74 @@
+
 #include "PmergeMe.hpp"
 
-int main(int argc, char** argv)
+void display_time(clock_t start, clock_t end)
 {
-    if (argc < 2)
-    {
-        std::cerr << "Error: plz enter arguments" << std::endl;
-        return 1;
+    double duration = static_cast<double>(end - start) / CLOCKS_PER_SEC;
+    int sec = static_cast<int>(duration);
+    int msec = static_cast<int>((duration - sec) * 1000);
+    int usec = static_cast<int>(((duration - sec) * 1000000)) % 1000;
+
+    std::cout << sec << "s " << msec << "ms " << usec << "µs" << std::endl;
+}
+
+void print_argv(int argc, char **argv)
+{
+    std::cout << std::endl << "Before: ";
+    for (int i = 1; i < argc; ++i)
+        std::cout << argv[i] << (i < argc - 1 ? " " : "\n");
+}
+
+void printOptimalComparisonTable(int n) {
+    int totalComparisons = 0;
+    for (int k = 1; k <= n; ++k) {
+        totalComparisons += std::ceil(std::log(3.0 * k / 4.0) / std::log(2.0));
     }
+	std::cout << std::endl;
+    std::cout << "Element count: " << n << std::endl;
+    std::cout << "Optimal comparisons (Ford_Johnson): " << totalComparisons << std::endl;
+}
 
-    try
-    {
-        std::vector<int> vec;
-        std::deque<int> deq;
+int main(int argc, char **argv)
+{
+    if (argc == 1)
+        return 0;
 
-		PmergeMe sorter;
-        sorter.parseInput(argc, argv, vec, deq);
+    print_argv(argc, argv);
 
-        printContainer("Before: ", vec);
+    clock_t t1, t2;
 
+    try {
+		if (argc == 2)
+		{
 
-        clock_t start_vec = clock();
-        sorter.mergeInsertSortVector(vec);
-        clock_t end_vec = clock();
-
-        clock_t start_deq = clock();
-        sorter.mergeInsertSortDeque(deq);
-        clock_t end_deq = clock();
-
-        printContainer("After: ", vec);
-
-        double time_vec = static_cast<double>(end_vec - start_vec) / CLOCKS_PER_SEC * 1000000;
-        double time_deq = static_cast<double>(end_deq - start_deq) / CLOCKS_PER_SEC * 1000000;
-
-        std::cout << "Time to process a range of " << vec.size() << " elements with std::vector : " 
-                  << time_vec << " us" << std::endl;
-
-        std::cout << "Time to process a range of " << deq.size() << " elements with std::deque : " 
-                  << time_deq << " us" << std::endl;
-		// std::cout << "comparison: " << sorter.getVectorComparisons() << std::endl;
-		// std::cout << "Deque comparisons: " << sorter.getDequeComparisons() << std::endl;
-
-		printOptimalComparisonTable(sorter.getVectorComparisons(), argc - 1);
+			std::cout << "After:  " << argv[1] << std::endl;
+			
+			std::cout << std::endl << "Number of comparisons: 0" << std::endl;
+			return 0;
+		}
+        t1 = std::clock();
+        PmergeMe< std::deque<long int> > deq(argc, argv);
+        t2 = std::clock();
+		std::cout << "After:  ";
+        deq.print_content();
+        std::cout << "Time (deque): ";
+        display_time(t1, t2);
+		
+        t1 = std::clock();
+        PmergeMe< std::vector<long int> > vec(argc, argv);
+        t2 = std::clock();
+        std::cout << "Time (vector): ";
+        display_time(t1, t2);
+		std::cout << std::endl << "Number of comparisons: " << deq.comparisonCount << std::endl;
     }
-    catch (const std::exception& e)
-    {
-        std::cerr << "Error: " << e.what() << std::endl;
-        return 1;
+    catch (const std::exception& e) {
+        if (g_errorDetected) {
+            std::cerr << "Error: " << e.what() << std::endl;
+            return -1;
+        }
     }
-
+	printOptimalComparisonTable(argc - 1);
     return 0;
 }
+
+
