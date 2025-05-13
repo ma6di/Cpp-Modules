@@ -2,13 +2,7 @@
 #include <deque>
 #include "PmergeMe.hpp"
 
-template <typename Container>
-void printContainer(const std::string& label, const Container& c) {
-    std::cout << label;
-    for (typename Container::const_iterator it = c.begin(); it != c.end(); ++it)
-        std::cout << *it << " ";
-    std::cout << std::endl;
-}
+
 
 int main(int argc, char** argv) {
     try {

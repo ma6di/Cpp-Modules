@@ -38,20 +38,11 @@ public:
     // Entry point for sorting
     static void mergeInsertSort(Container& container);
 
-	static void printContainer(const std::string& label, const Container& container);
 
 	static size_t countRecursionLevels(size_t n);
 	static size_t getComparisons();
 	static void resetComparisons();
 
-	struct CountCmp {
-		size_t& ctr;
-		CountCmp(size_t& c_) : ctr(c_) {}
-		bool operator()(const value_type& a, const value_type& b) const {
-			++ctr;
-			return a < b;
-		}
-	};
 	static int  totalRecursionLevels;
 	
 
@@ -75,5 +66,9 @@ private:
 };
 
 void printOptimalComparisonTable(int actualComparisons, int n);
+
+template <typename Container>
+void printContainer(const std::string& label, const Container& container);
+
 
 #include "PmergMe.tpp"
