@@ -6,7 +6,7 @@
 /*   By: mcheragh <mcheragh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 11:18:50 by mcheragh          #+#    #+#             */
-/*   Updated: 2025/05/14 11:22:07 by mcheragh         ###   ########.fr       */
+/*   Updated: 2025/05/14 12:19:09 by mcheragh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,8 +76,14 @@ void PmergeMe<Container>::parseInput(int argc, char** argv, Container& container
         std::istringstream ss(argv[i]);
         value_type num;
         ss >> num;
-        if (ss.fail() || !ss.eof())
+        // 1) check parse success
+        if (ss.fail() || ! (ss >> std::ws).eof()) {
             throw std::runtime_error("Error: Invalid input.");
+        }
+        // 2) reject negative values
+        if (num < 0) {
+            throw std::runtime_error("Error: Invalid input.");
+        }
         container.push_back(num);
     }
 }
@@ -130,11 +136,11 @@ Container PmergeMe <Container>::recursiveSort(const Container& data) {
 		compIdx[pendings.size() - 1] = mainChain.size();  // or a safe default like chain.size()
 
 	#ifndef NDEBUG
-		size_t remLevels = countRecursionLevels(chain.size());
+		size_t remLevels = countRecursionLevels(mainChain.size());
 		size_t depth = totalRecursionLevels - remLevels;
 		std::cout << std::endl << "Recursion level " << depth << std::endl;
 		printPairs("Original Pairs: ", data);
-		printContainer("A list (Main Chain): ", chain);
+		printContainer("A list (Main Chain): ", mainChain);
 		printContainer("B list (Pending): ", pendings);
 		printContainer("B List companion index of A list: ", compIdx);
 	#endif
