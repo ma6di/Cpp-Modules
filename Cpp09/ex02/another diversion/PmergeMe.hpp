@@ -54,13 +54,10 @@ private:
     static Container recursiveSort(const Container& input);
 
     // Insert an element into the sorted range using binary search
-// returns the zero-based index where `v` was inserted into c
-	static size_t insertBounded(Container& c,
-		const value_type& v,
-		size_t upperBound);
-
-    static bool less(const value_type& a, const value_type& b);
-			   
+	// returns the zero-based index where `v` was inserted into c
+	static size_t insertBounded(Container& c, const value_type& v,
+											size_t upperBound);
+	// Generate the Jacobsthal insertion order	   
 	static std::vector<size_t> generateJacobsthalInsertionOrder(size_t n);
 
 };

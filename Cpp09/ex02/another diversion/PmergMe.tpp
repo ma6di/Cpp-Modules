@@ -96,30 +96,33 @@ void PmergeMe<Container>::mergeInsertSort(Container& container) {
 }
 
 template <typename Container>
-Container PmergeMe<Container>::recursiveSort(const Container& data) {
+Container PmergeMe <Container>::recursiveSort(const Container& data) {
     if (data.size() <= 1)
         return data;
 
     size_t n = data.size();
     Container aList;
-    Container levelPendings;
+    Container pendingAll;
 
     for (size_t i = 0; i + 1 < n; i += 2) {
         value_type x = data[i], y = data[i + 1];
         ++comparisons;
-        if (less(y, x)) std::swap(x, y);
+        if (y < x)
+		{
+			std::swap(x, y);
+		}
         aList.push_back(y);         // larger
-        levelPendings.push_back(x); // smaller
-    }
+        pendingAll.push_back(x); // smaller
+	}
     if (n % 2 != 0) {
-        levelPendings.push_back(data.back());
+        pendingAll.push_back(data.back());
     }
 
-    Container subSorted = recursiveSort(aList);
-    Container chain = subSorted;
-    Container pendingAll = levelPendings;
+    Container chain = recursiveSort(aList);
+    // Container chain = subSorted;
+    // Container pendingAll = levelPendings;
 
-    size_t m = chain.size();
+    size_t m = pendingAll.size();
 	std::vector<size_t> compIdx(pendingAll.size());
 
 	for (size_t i = 0; i < aList.size(); ++i) {
@@ -128,44 +131,28 @@ Container PmergeMe<Container>::recursiveSort(const Container& data) {
 	}
 
 	// Handle the unpaired odd element if it exists
-	if (pendingAll.size() > aList.size()) {
-		compIdx[aList.size()] = chain.size();  // or a safe default like chain.size()
-	}
+	if (pendingAll.size() > aList.size())
+		compIdx[pendingAll.size() - 1] = chain.size();  // or a safe default like chain.size()
 
-
-    size_t remLevels = countRecursionLevels(chain.size());
-    size_t depth = totalRecursionLevels - remLevels;
-
-	#ifdef DEBUG
-		std::cout << "Recursion level " << depth << std::endl;
-		printPairs("Pairs: ", data);
+	#ifndef NDEBUG
+		size_t remLevels = countRecursionLevels(chain.size());
+		size_t depth = totalRecursionLevels - remLevels;
+		std::cout << std::endl << "Recursion level " << depth << std::endl;
+		printPairs("Original Pairs: ", data);
 		printContainer("A list (Main Chain): ", chain);
 		printContainer("B list (Pending): ", pendingAll);
 		printContainer("B List companion index of A list: ", compIdx);
 	#endif
 
-    if (depth == totalRecursionLevels) {
-        chain.insert(chain.begin(), pendingAll[0]);
-        for (size_t j = 0; j < m; ++j) {
-            ++compIdx[j];
-        }
-        pendingAll.erase(pendingAll.begin());
-        compIdx.erase(compIdx.begin());
-    }
-
 	bool odd = false;
-	m = chain.size();
-
-	if (chain.size() < pendingAll.size()) {
+	if (chain.size() < pendingAll.size())
 		odd = true;
-		m += 1;  // simulate extra slot for the unpaired last one
-	}
 
 	std::vector<size_t> order = generateJacobsthalInsertionOrder(m);
 
-	#ifdef DEBUG
+	#ifndef NDEBUG
 		printContainer("Jacobsthal insertion order: ", order);
-		std::cout << std::endl;
+		std::cout << "Comparison: " << comparisons << std::endl;
 	#endif
 
 	std::vector<bool> inserted(pendingAll.size(), false);
@@ -203,20 +190,20 @@ Container PmergeMe<Container>::recursiveSort(const Container& data) {
 			}
 		}
 
-		if (!found) {
-			// fallback: last uninserted
-			for (i = pendingAll.size(); i > 0; --i) {
-				if (!inserted[i - 1]) {
-					i = i - 1;
-					found = true;
-					break;
-				}
-			}
-		}
+		// if (!found) {
+		// 	// fallback: last uninserted
+		// 	for (i = pendingAll.size(); i > 0; --i) {
+		// 		if (!inserted[i - 1]) {
+		// 			i = i - 1;
+		// 			found = true;
+		// 			break;
+		// 		}
+		// 	}
+		// }
 
 		if (!found || i >= pendingAll.size() || i >= compIdx.size())
 		{
-			#ifdef DEBUG
+			#ifndef NDEBUG
 			std::cout << "skipped" << std::endl;
 			#endif
 			continue;
@@ -225,10 +212,10 @@ Container PmergeMe<Container>::recursiveSort(const Container& data) {
 		const value_type& v = pendingAll[i];
 		size_t bound = compIdx[i];
 
-	#ifdef DEBUG
+		#ifndef NDEBUG
 		std::cout << "element to insert in first loop: " << v << std::endl;
 		std::cout << "upper bound: " << bound << std::endl;
-	#endif
+		#endif
 
 		size_t insPos;
 		if (bound == 0) {
@@ -245,6 +232,9 @@ Container PmergeMe<Container>::recursiveSort(const Container& data) {
 			if (!inserted[j] && compIdx[j] >= insPos)
 				++compIdx[j];
 		}
+		#ifndef NDEBUG
+		std::cout << "Comparison: " << comparisons << std::endl;
+		#endif
 	}
 
 
@@ -258,7 +248,7 @@ Container PmergeMe<Container>::recursiveSort(const Container& data) {
 
 		value_type v = pendingAll[i];  // copy instead of reference
 
-		#ifdef DEBUG
+		#ifndef NDEBUG
 		std::cout << "element to insert in second loop : " << v << std::endl;
 		std::cout << "upper bound: " << bound << std::endl;
 
@@ -288,13 +278,6 @@ size_t PmergeMe<Container>::insertBounded(Container& c, const value_type& v,
         c.insert(c.begin(), v);
         return 0;
     }
-	
-	if (upperBound > 0 && v >= c[upperBound - 1]) {
-		++comparisons;
-		c.insert(c.begin() + upperBound, v);
-		return upperBound;
-	}
-	
 
     typename Container::iterator left  = c.begin();
     typename Container::iterator right = c.begin() + upperBound;
@@ -302,7 +285,7 @@ size_t PmergeMe<Container>::insertBounded(Container& c, const value_type& v,
     while (left < right) {
         ++comparisons;
         typename Container::iterator mid = left + (right - left) / 2;
-        if (less(v, *mid))
+        if (v < *mid)
             right = mid;
         else
             left = mid + 1;
@@ -315,11 +298,6 @@ size_t PmergeMe<Container>::insertBounded(Container& c, const value_type& v,
 }
 
 template <typename Container>
-bool PmergeMe<Container>::less(const value_type& a, const value_type& b) {
-    return a < b;
-}
-
-template <typename Container>
 size_t PmergeMe<Container>::countRecursionLevels(size_t n) {
     size_t levels = 0;
     while (n > 1) {
@@ -328,32 +306,6 @@ size_t PmergeMe<Container>::countRecursionLevels(size_t n) {
     }
     return levels;
 }
-
-
-// template <typename Container>
-// std::vector<size_t> PmergeMe<Container>::generateJacobsthalInsertionOrder(size_t n) {
-//     std::vector<size_t> order;
-//     if (n == 0) return order;
-//     // J0 = 0, J1 = 1
-//     order.push_back(0);
-//     if (n > 1) order.push_back(1);
-
-//     size_t a = 1, b = 1, Jprev = 1;
-//     while (true) {
-//         size_t Jk = b + 2*a;  // Jacobsthal recurrence
-//         if (Jk > n-1) break;
-//         for (size_t x = Jk; x > Jprev; --x)
-//             order.push_back(x);
-//         a = b; b = Jk; Jprev = Jk;
-//     }
-//     // finish off
-// 	for (size_t i = Jprev + 1; i < n; ++i) {
-// 		order.push_back(i);
-// 	}
-	
-
-//     return order;
-// }
 
 template <typename Container>
 std::vector<size_t> PmergeMe<Container>::generateJacobsthalInsertionOrder(size_t n) {
@@ -392,5 +344,3 @@ std::vector<size_t> PmergeMe<Container>::generateJacobsthalInsertionOrder(size_t
 
     return order;
 }
-
-

@@ -11,9 +11,9 @@ COMMON_FLAGS:= -Wall -Wextra -Werror -std=c++98
 MODE ?= release
 
 ifeq ($(MODE),debug)
-	CXXFLAGS := $(COMMON_FLAGS) -g -DDEBUG
+	CXXFLAGS := $(COMMON_FLAGS) -g
 else ifeq ($(MODE),release)
-	CXXFLAGS := $(COMMON_FLAGS)
+	CXXFLAGS := $(COMMON_FLAGS) -DNDEBUG
 else
 	$(error Unknown MODE '$(MODE)'. Use 'make MODE=debug' or 'make MODE=release')
 endif

@@ -17,33 +17,36 @@ int main(int argc, char** argv) {
     try {
 		std::vector<int> vec;
 		PmergeMe<std::vector<int> > vecSorter;
-		
-		//printContainer("Before: ", vec);
+		std::vector<int> print;
+		vecSorter.parseInput(argc, argv, print);
+		printContainer("Before: ", print);
+
 		clock_t start_vec = clock();
 		vecSorter.parseInput(argc, argv, vec);
 		vecSorter.mergeInsertSort(vec);
 		clock_t end_vec = clock();
 
 		printContainer("After : ", vec);
-		// std::vector<int> test;
-		// vecSorter.parseInput(argc, argv, test);
-		// std::sort(test.begin(), test.end());
-		// printContainer("After : ", test);
+		
+		std::cout << "Time to process a range of " << vec.size() << " elements with std::vector : ";
+		display_time(start_vec, end_vec);
+
+		
+		#ifdef NDEBUG
 		std::deque<int> deq;
 		PmergeMe<std::deque<int> > deqSorter;
-		
 		clock_t start_deq = clock();
 		deqSorter.parseInput(argc, argv, deq);
 		deqSorter.mergeInsertSort(deq);
 		clock_t end_deq = clock();
-	
-		std::cout << "Time to process a range of " << vec.size() << " elements with std::vector : ";
-		display_time(start_vec, end_vec);
-
 		std::cout << "Time to process a range of " << deq.size() << " elements with std::deque : ";
 		display_time(start_deq, end_deq);
-		printOptimalComparisonTable( vecSorter.getComparisons(), argc - 1);
+		#endif
 
+		
+		#ifndef NDEBUG
+		printOptimalComparisonTable( vecSorter.getComparisons(), argc - 1);
+		#endif
 		// for (int n = 1; n <= 30; ++n) {
 		// 	std::vector<int> v(n);
 		// 	// C++98: fill with 0,1,2,…,n−1
