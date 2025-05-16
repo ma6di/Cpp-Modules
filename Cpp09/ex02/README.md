@@ -152,9 +152,9 @@ Jacobsthal insertion order: 0 1 2
 make
 ```
 
-###To enable step-by-step output:
+### To enable debug mode (step-by-step output):
 
-```cpp
+```bash
 make MODE=debug
 ```
 
